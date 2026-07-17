@@ -6,6 +6,14 @@ elsewhere).
 
 **Resume sequence (do not skip):**
 
+0. **Set git identity to the project author (FIRST, before any commit):**
+   ```bash
+   git config user.name "Ishtiak Ahmed Evan"
+   git config user.email "iaevan008@gmail.com"
+   ```
+   Verify with `git config user.name && git config user.email`. Never commit as anyone else.
+   Never use "Claude" or any AI tool name as author/committer. The repo author is Ishtiak Ahmed
+   Evan and every commit — yours and any agent's — must be attributed to him.
 1. `git status && git log --oneline -3` — confirm clean state and last commit.
 2. Read **`RESUME.md`** — current build state, what's done, what's in-progress, the ordered
    17-step remaining plan, architecture invariants that must not be broken.
@@ -26,6 +34,9 @@ elsewhere).
 
 ## Working rules (from RESUME.md — repeating for emphasis)
 
+- **Git identity is `Ishtiak Ahmed Evan <iaevan008@gmail.com>`** — set it before the first
+  commit, verify with `git config user.name && git config user.email`. Any commit authored as
+  "Claude", "Fable", or any other AI/tool name must be amended before push.
 - Commit every ~10 file changes. Conventional commit messages. `git push -u origin
   claude/spcnd-ecom-woocommerce-xn8d68` (retry 4x with backoff on network errors only).
 - Each package must `pnpm --filter <pkg> build` clean before moving on.

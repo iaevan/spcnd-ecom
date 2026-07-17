@@ -7,6 +7,10 @@ DECISION-1; the reports replace it).
 
 ## ⚠ Working rules for future sessions
 
+0. **Git identity is `Ishtiak Ahmed Evan <iaevan008@gmail.com>`** — set before the first commit
+   of every session via `git config user.name "Ishtiak Ahmed Evan" && git config user.email
+   "iaevan008@gmail.com"`. Never commit as "Claude", "Fable", or any AI/tool name. If a commit
+   lands with the wrong author, amend it before push.
 1. **Commit every ~10 file changes.** Small, coherent commits on branch
    `claude/spcnd-ecom-woocommerce-xn8d68`, push with `git push -u origin <branch>` (retry 4x
    with backoff on network errors only). Never push elsewhere.
