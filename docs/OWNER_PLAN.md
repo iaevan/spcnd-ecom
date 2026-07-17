@@ -43,7 +43,7 @@ PRs, releases, stars, branches, default branch setting. The 4 commits already at
    "repository": { "type": "git", "url": "https://github.com/spacendigital/spcnd-ecom.git" }
    ```
 
-4. Update SESSION_START.md and RESUME.md if they reference the old URL — current versions
+4. Update docs/SESSION_START.md and docs/RESUME.md if they reference the old URL — current versions
    do not (they reference the branch name only), so likely no change needed.
 
 5. (Optional) Update the npm scope ownership when you publish to npm. If you publish

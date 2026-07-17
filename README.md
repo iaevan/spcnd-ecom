@@ -30,29 +30,30 @@ system). spcnd-ecom closes that gap with a stack you actually want to use in 202
 ## Repo layout
 
 ```
-woocommerce-copy/
-├── docs/
-│   └── AGENTS.md                  # THE spec. Fable reads this end-to-end.
-├── woocommerce-comprehensive-report.md     # WC internals — behavioral reference
-├── woocommerce-core-architecture-report.md # WC architecture — behavioral reference
-├── woocommerce-feature-parity-report.md   # feature parity checklist
-├── woocommerce-analysis.md                # earlier WC analysis (data tables, controllers)
-├── woocommerce_api_reference.md            # WC REST controller reference
-├── FABLE.md                                # The one-shot build prompt for Fable
-└── README.md                               # this file
+spcnd-ecom/
+├── README.md                               # this file (only .md at repo root)
+└── docs/
+    ├── AGENTS.md                           # THE spec. Fable reads this end-to-end.
+    ├── SESSION_START.md                    # Resume protocol for Fable sessions.
+    ├── RESUME.md                           # Current build state, what's done, next steps.
+    ├── DECISIONS.md                        # Spec-gap decisions honored by all sessions.
+    ├── OWNER_PLAN.md                       # Future repo-transfer plan (do not act on it).
+    ├── woocommerce_comprehensive_report.md # WC internals — behavioral reference
+    ├── woocommerce-core-architecture-report.md # WC architecture — behavioral reference
+    ├── woocommerce-feature-parity-report.md   # feature parity checklist
+    ├── woocommerce-analysis.md                # earlier WC analysis (data tables, controllers)
+    └── woocommerce_api_reference.md          # WC REST controller reference
 ```
 
-The `docs/AGENTS.md` spec **replaces** the original AGENTS.md (preserved as
-`docs/archive/AGENTS.original.md` for behavioral cross-reference). It encodes all architecture
-decisions (multi-dialect DB, two-layer plugin system, installable-library product shape,
-Hono-only API, separate admin SPA, opt-in plugin auto-discovery, plugin TUI, etc.) and is the
-single source of truth for the build.
+The `docs/AGENTS.md` spec encodes all architecture decisions (multi-dialect DB, two-layer
+plugin system, installable-library product shape, Hono-only API, separate admin SPA, opt-in
+plugin auto-discovery, plugin TUI, etc.) and is the single source of truth for the build.
 
 ## Building it
 
-This repo is currently in the spec phase — no source yet. The build is executed by Fable in one
-shot using `FABLE.md` as the prompt and `docs/AGENTS.md` as the spec. The five `woocommerce-*.md`
-files at the repo root are the behavioral reference for WC internals.
+This repo is being built by Fable in passes — each pass resumes by reading
+`docs/SESSION_START.md` and continuing from `docs/RESUME.md`'s next step. The five
+`docs/woocommerce-*.md` files are the behavioral reference for WC internals.
 
 Once Fable has run, the resulting structure matches §3 of `docs/AGENTS.md`:
 

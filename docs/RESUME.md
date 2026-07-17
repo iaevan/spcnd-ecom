@@ -1,8 +1,8 @@
 # RESUME — build state handoff
 
 Working notes for continuing the spcnd-ecom build across sessions. Read this, then
-`docs/AGENTS.md` (the spec), then `DECISIONS.md`. The five `woocommerce-*.md` files at the repo
-root are the behavioral reference (the original AGENTS.original.md is NOT in the repo — see
+`docs/AGENTS.md` (the spec), then `docs/DECISIONS.md`. The five `docs/woocommerce-*.md` files
+are the behavioral reference (the original AGENTS.original.md is NOT in the repo — see
 DECISION-1; the reports replace it).
 
 ## ⚠ Working rules for future sessions
@@ -17,7 +17,7 @@ DECISION-1; the reports replace it).
 2. Keep each package compiling (`pnpm --filter <pkg> build`) before moving on (spec §13).
 3. Never introduce: floats for money/stock, DEFAULT 0 sentinels, a second API framework,
    module-level singletons, core → impl-package imports (dependency-cruiser enforces).
-4. Update DECISIONS.md when filling a genuine spec gap; update this file's status section
+4. Update docs/DECISIONS.md when filling a genuine spec gap; update this file's status section
    before ending a session.
 
 ## Environment facts (verified)
@@ -154,7 +154,7 @@ Written so far (all under packages/core/src/):
 16. **tests/compat** (30+ WC behaviors), **tests/integration** (v1+v3 API against sqlite,
     pg/mysql skip-if-no-docker), e2e; README per package; root README refresh; `pnpm build/
     typecheck/lint/test` + depcruise all green
-17. Final: verify acceptance criteria §14, update DECISIONS.md, this file can then be deleted.
+17. Final: verify acceptance criteria §14, update docs/DECISIONS.md, this file can then be deleted.
 
 ## Key architecture invariants (do not break)
 

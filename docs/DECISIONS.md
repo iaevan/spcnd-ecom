@@ -8,7 +8,7 @@ Spec-gap decisions made during the build, per the operating instructions.
   §28 hook catalog). The uploaded archive does not contain it.
 - Options considered: A) halt and ask; B) reconstruct behavior from the five `woocommerce-*.md`
   reports which cover the same ground.
-- Decision: B — the five reports at the repo root are treated as the authoritative behavioral
+- Decision: B — the five reports in `docs/` are treated as the authoritative behavioral
   reference. All algorithm/hook/email/table details were sourced from them.
 - Rationale: The reports contain the calculation algorithms (comprehensive §11), hook catalogs
   (comprehensive §10 + core-architecture §10), 22-email table (feature-parity §3.2), session
