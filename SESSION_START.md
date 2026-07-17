@@ -52,6 +52,14 @@ Commit with `wip(scope): description of what's left` and update RESUME.md's stat
 to point at the next file you'd have written. Next session reads this file + RESUME.md +
 git log to resume in under 30 seconds of context.
 
+## Repo ownership (read OWNER_PLAN.md — do not act on it)
+
+The repo is currently at `iaevan/spcnd-ecom` (personal). It will be transferred to the
+`spacendigital` org after v1 ships. **Do not initiate the transfer.** Do not change the
+`repository` field in any `package.json` to point at `spacendigital`. Do not create the
+`spacendigital/spcnd-ecom` repo. The owner will handle the transfer when v1 is ready.
+Ignore this section if `OWNER_PLAN.md` is missing or says transfer is complete.
+
 ## Environment facts (verified by previous session, re-verify if anything seems off)
 
 - Node 22+, pnpm 10.33 available; registry works through proxy; better-sqlite3 compiles.
