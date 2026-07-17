@@ -1,0 +1,41 @@
+{
+  "name": "spcnd-ecom-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "test": "turbo run test",
+    "test:integration": "vitest run --project integration",
+    "test:compat": "vitest run --project compat",
+    "test:e2e": "pnpm --filter @spcnd-ecom/demo test:e2e",
+    "db:generate": "pnpm --filter @spcnd-ecom/db db:generate",
+    "db:push": "pnpm --filter @spcnd-ecom/db db:push",
+    "db:studio": "pnpm --filter @spcnd-ecom/db db:studio",
+    "db:migrate": "pnpm --filter @spcnd-ecom/db db:migrate",
+    "db:seed": "pnpm --filter @spcnd-ecom/db db:seed",
+    "depcruise": "depcruise packages apps --config .dependency-cruiser.cjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "dependency-cruiser": "^16.10.0",
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "better-sqlite3",
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

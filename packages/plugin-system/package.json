@@ -1,0 +1,33 @@
+{
+  "name": "@spcnd-ecom/plugin-system",
+  "version": "0.1.0",
+  "description": "Typed event bus, DI container and plugin contract for spcnd-ecom",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./discover": {
+      "types": "./dist/discover.d.ts",
+      "default": "./dist/discover.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@spcnd-ecom/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

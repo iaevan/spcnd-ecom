@@ -1,0 +1,44 @@
+{
+  "name": "@spcnd-ecom/db",
+  "version": "0.1.0",
+  "description": "Drizzle schemas for SQLite/PostgreSQL/MySQL, migrations and seeders for spcnd-ecom",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/sqlite/schema.d.ts",
+      "default": "./dist/sqlite/schema.js"
+    }
+  },
+  "files": ["dist", "migrations"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts && drizzle-kit generate --config drizzle.postgres.config.ts && drizzle-kit generate --config drizzle.mysql.config.ts",
+    "db:push": "drizzle-kit push --config drizzle.config.ts",
+    "db:studio": "drizzle-kit studio --config drizzle.config.ts",
+    "db:migrate": "node dist/bin/migrate.js",
+    "db:seed": "node dist/bin/seed.js"
+  },
+  "dependencies": {
+    "@spcnd-ecom/types": "workspace:*",
+    "better-sqlite3": "^11.10.0",
+    "drizzle-orm": "^0.44.2",
+    "mysql2": "^3.14.1",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/pg": "^8.15.2",
+    "drizzle-kit": "^0.31.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
