@@ -1,8 +1,7 @@
 # SESSION START — read this first
 
-You are resuming the spcnd-ecom build. Work is committed on branch
-`claude/spcnd-ecom-woocommerce-xn8d68` (push target is that branch only — never push
-elsewhere).
+You are resuming the spcnd-ecom build. Work is committed on branch **`main`**
+(push target is `main` only — never push elsewhere, never create feature branches).
 
 **Resume sequence (do not skip):**
 
@@ -37,14 +36,15 @@ elsewhere).
 - **Git identity is `Ishtiak Ahmed Evan <iaevan008@gmail.com>`** — set it before the first
   commit, verify with `git config user.name && git config user.email`. Any commit authored as
   "Claude", "Fable", or any other AI/tool name must be amended before push.
-- Commit every ~10 file changes. Conventional commit messages. `git push -u origin
-  claude/spcnd-ecom-woocommerce-xn8d68` (retry 4x with backoff on network errors only).
+- Commit every ~10 file changes. Conventional commit messages. `git push -u origin main`
+  (retry 4x with backoff on network errors only).
 - Each package must `pnpm --filter <pkg> build` clean before moving on.
 - Never: floats for money/stock, `DEFAULT 0` sentinels, a second API framework,
   module-level singletons, core → impl-package imports, more than ~10 changes uncommitted.
 - Turbo `test` depends on `^build` — always `pnpm build` before cross-package tests.
 - Update `DECISIONS.md` when filling a genuine spec gap. Update RESUME.md's status section
   before ending a session (mark what's done, what's in-progress).
+- Never create feature branches. All work goes on `main`.
 
 ## If interrupted mid-build
 

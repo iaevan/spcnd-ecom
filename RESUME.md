@@ -11,9 +11,9 @@ DECISION-1; the reports replace it).
    of every session via `git config user.name "Ishtiak Ahmed Evan" && git config user.email
    "iaevan008@gmail.com"`. Never commit as "Claude", "Fable", or any AI/tool name. If a commit
    lands with the wrong author, amend it before push.
-1. **Commit every ~10 file changes.** Small, coherent commits on branch
-   `claude/spcnd-ecom-woocommerce-xn8d68`, push with `git push -u origin <branch>` (retry 4x
-   with backoff on network errors only). Never push elsewhere.
+1. **Commit every ~10 file changes.** Small, coherent commits on branch **`main`**, push with
+   `git push -u origin main` (retry 4x with backoff on network errors only). Never push
+   elsewhere, never create feature branches.
 2. Keep each package compiling (`pnpm --filter <pkg> build`) before moving on (spec §13).
 3. Never introduce: floats for money/stock, DEFAULT 0 sentinels, a second API framework,
    module-level singletons, core → impl-package imports (dependency-cruiser enforces).
