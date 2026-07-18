@@ -80,8 +80,14 @@ loaders. 13 package tests; workspace 71 tests green, depcruise clean.
   place-order status routing; stripe/paypal refused w/ S5 marker
 - `@spacendigital/reviews` — verified-owner detection, moderation,
   same-txn rating aggregate sync; ReviewsPlugin
-Workspace: 10 packages, 90 tests green, depcruise clean.
-Next session starts at NEXT STEPS **step 8 (email)** then **step 9 (analytics)**.
+**Step 8 (email) is DONE** — `@spacendigital/email`: all 22 WC template ids as
+React components over a shared layout (DECISION-9), console/SMTP(lazy
+nodemailer, EDGE gap 2)/Resend/SendGrid transports, DbEmailService with
+per-template email_settings config + WC placeholders, EmailPlugin wiring the
+§3.2 trigger table (new_order guarded once via order_events).
+
+Workspace: 11 packages, 95 tests green, depcruise clean (109 modules).
+Next session starts at NEXT STEPS **step 9 (analytics)** then **step 10 (api)**.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
