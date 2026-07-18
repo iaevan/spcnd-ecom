@@ -92,8 +92,21 @@ category trees, returning-customer detection), rebuildAllLookups() for the
 CLI, 10 report queries + leaderboards with dialect-aware money aggregation,
 AnalyticsPlugin resyncing on status/customer events.
 
-Workspace: 12 packages, 100 tests green, depcruise clean.
-Next session starts at NEXT STEPS **step 10 (api — Hono REST v1 + v3)**.
+**Step 10 (api) is DONE** — `@spacendigital/api`: `createApi(core)` composes
+`/api/v1` (clean JSON: products+variations+cats+tags+reviews, orders+notes+
+refunds+status+payment-complete+recalculate, customers, coupons, taxes,
+shipping zones/methods/locations, webhook rows, gateway list, settings,
+system_status, all 10 reports + leaderboards, data/countries+currencies),
+`/api/v3` (WC shapes via compat-wc serializers, X-WP-Total/TotalPages/Link
+headers, batch create/update/delete for products/orders/customers, WC→
+canonical body mapping incl. ''-clears-price), `/api/store` (session-cookie
+cart/coupon/checkout/order-received; bare `spcnd_session` cookie until S2),
+`createWebhookRouter()` (S3 ack stub), `createAdminHandler()` ('./admin'
+export, Node fs, SPA fallback). Admin surfaces sit behind the S6 dev-trust
+middleware — do not expose publicly until S6.
+
+Workspace: 13 packages, 105 tests green, depcruise clean.
+Next: NEXT STEPS **step 11 (ui + apps/admin)**, then 12 (adapters), 13 (demo).
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
