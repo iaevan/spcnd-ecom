@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@source "../node_modules/@spacendigital/ui/dist";
+
+body {
+  @apply bg-zinc-50 text-zinc-900 antialiased;
+}
