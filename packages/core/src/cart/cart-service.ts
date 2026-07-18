@@ -39,7 +39,7 @@ import type {
   TaxService,
 } from '../services/interfaces.js';
 import type { SettingsService } from '../settings/service.js';
-import { nowIso, stableHash } from '../utils.js';
+import { stableHash } from '../utils.js';
 import {
   type ComputedTotals,
   type TotalsFee,
@@ -760,5 +760,3 @@ export class CartService {
     };
   }
 }
-
-export { nowIso };

@@ -143,6 +143,12 @@ export interface EmailService {
 export interface MediaAdapter {
   put(key: string, data: Uint8Array, contentType: string): Promise<{ url: string }>;
   delete(key: string): Promise<void>;
+  /**
+   * Streamed body for force-download delivery. Web ReadableStream so the
+   * local-fs impl (Node) and R2/S3 impls (edge) are interchangeable
+   * (docs/EDGE_V2_HARDENING.md gaps 3–4) — services never touch `fs`.
+   */
+  stream?(key: string): Promise<ReadableStream<Uint8Array>>;
   /** Signed URL for protected downloads; falls back to the public URL. */
   getSignedUrl?(key: string, expiresInSeconds: number): Promise<string>;
 }
