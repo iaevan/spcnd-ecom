@@ -1,0 +1,45 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = 'spcnd demo store' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <style is:global>
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, sans-serif; color: #18181b; background: #fafafa; }
+      header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: #fff; border-bottom: 1px solid #e4e4e7; }
+      header a { color: inherit; text-decoration: none; }
+      header nav { display: flex; gap: 1.25rem; font-size: 0.95rem; }
+      main { max-width: 960px; margin: 0 auto; padding: 2rem; }
+      .brand { font-weight: 700; color: #7c3aed; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
+      button.primary { background: #7c3aed; color: #fff; border: 0; border-radius: 6px; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 1rem; }
+      input, select { padding: 0.5rem; border: 1px solid #d4d4d8; border-radius: 6px; font-size: 0.95rem; width: 100%; }
+      label { display: block; font-size: 0.8rem; margin-bottom: 1rem; color: #52525b; }
+      table { border-collapse: collapse; width: 100%; }
+      td, th { text-align: left; padding: 0.5rem; border-bottom: 1px solid #e4e4e7; }
+      .notice { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/shop">spcnd demo store</a>
+      <nav>
+        <a href="/shop">Shop</a>
+        <a href="/category/apparel">Apparel</a>
+        <a href="/category/accessories">Accessories</a>
+        <a href="/cart" data-testid="nav-cart">Cart</a>
+        <a href="/my-account">My account</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

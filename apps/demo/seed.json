@@ -1,0 +1,146 @@
+{
+  "settings": {
+    "string": {
+      "store_name": "spcnd demo store",
+      "store_url": "http://localhost:4321",
+      "default_country": "US:CA",
+      "currency": "USD",
+      "merchant_email": "owner@spcnd.test",
+      "email_from_address": "store@spcnd.test"
+    },
+    "boolean": {
+      "calc_taxes": true,
+      "enable_coupons": true,
+      "enable_guest_checkout": true
+    }
+  },
+  "users": [
+    {
+      "email": "admin@spcnd.test",
+      "passwordHash": "pending_s4",
+      "role": "admin",
+      "firstName": "Store",
+      "lastName": "Owner",
+      "username": "admin"
+    },
+    {
+      "email": "customer@spcnd.test",
+      "passwordHash": "pending_s4",
+      "role": "customer",
+      "firstName": "Casey",
+      "lastName": "Customer",
+      "username": "casey"
+    }
+  ],
+  "categories": [
+    { "name": "Apparel", "slug": "apparel", "description": "Things you wear" },
+    { "name": "Accessories", "slug": "accessories", "description": "Things you carry" }
+  ],
+  "tags": [
+    { "name": "New", "slug": "new" },
+    { "name": "Sale", "slug": "sale" }
+  ],
+  "products": [
+    {
+      "name": "Nebula Tee",
+      "slug": "nebula-tee",
+      "shortDescription": "Soft cotton tee with the nebula print.",
+      "description": "A heavyweight 220gsm cotton tee, screen-printed nebula artwork, ethically made.",
+      "sku": "TEE-NEB",
+      "regularPrice": "25.0000",
+      "categories": ["apparel"],
+      "tags": ["new"],
+      "manageStock": true,
+      "stockQuantity": 40
+    },
+    {
+      "name": "Orbit Hoodie",
+      "slug": "orbit-hoodie",
+      "shortDescription": "Fleece-lined hoodie for cold launches.",
+      "description": "Brushed fleece interior, kangaroo pocket, embroidered orbit motif.",
+      "sku": "HOOD-ORB",
+      "regularPrice": "60.0000",
+      "salePrice": "48.0000",
+      "categories": ["apparel"],
+      "tags": ["sale"]
+    },
+    {
+      "name": "Comet Cap",
+      "slug": "comet-cap",
+      "shortDescription": "Six-panel cap, comet embroidery.",
+      "description": "Adjustable strap, curved brim, one size fits most humans.",
+      "sku": "CAP-COM",
+      "regularPrice": "18.0000",
+      "categories": ["accessories"]
+    },
+    {
+      "name": "Meteor Mug",
+      "slug": "meteor-mug",
+      "shortDescription": "350ml ceramic mug.",
+      "description": "Dishwasher-safe ceramic mug with meteor glaze. Coffee not included.",
+      "sku": "MUG-MET",
+      "regularPrice": "14.0000",
+      "categories": ["accessories"],
+      "manageStock": true,
+      "stockQuantity": 100
+    },
+    {
+      "name": "Galaxy Tote",
+      "slug": "galaxy-tote",
+      "shortDescription": "Canvas tote, galaxy lining.",
+      "description": "Heavy canvas tote with interior pocket and galaxy-print lining.",
+      "sku": "TOTE-GAL",
+      "regularPrice": "22.0000",
+      "categories": ["accessories"],
+      "tags": ["new"]
+    },
+    {
+      "name": "Starfield Wallpaper Pack",
+      "slug": "starfield-wallpaper-pack",
+      "shortDescription": "12 4K desktop wallpapers (instant download).",
+      "description": "Twelve hand-rendered starfield wallpapers in 4K, delivered instantly.",
+      "sku": "DL-STAR",
+      "regularPrice": "9.0000",
+      "virtual": true,
+      "downloadable": true,
+      "categories": ["accessories"]
+    }
+  ],
+  "coupons": [
+    {
+      "code": "welcome10",
+      "discountType": "percent",
+      "amount": "10",
+      "description": "10% off your first order"
+    }
+  ],
+  "taxRates": [
+    { "country": "US", "state": "CA", "name": "CA Sales Tax", "rate": "7.2500" },
+    { "country": "US", "state": "NY", "name": "NY Sales Tax", "rate": "8.8750" },
+    { "country": "GB", "name": "VAT", "rate": "20.0000" },
+    { "country": "DE", "name": "MwSt", "rate": "19.0000" },
+    { "country": "FR", "name": "TVA", "rate": "20.0000" }
+  ],
+  "shippingZones": [
+    {
+      "name": "United States",
+      "order": 0,
+      "locations": [{ "type": "country", "code": "US" }],
+      "methods": [
+        { "methodId": "flat_rate", "settings": { "title": "Flat rate", "cost": "5" } },
+        {
+          "methodId": "free_shipping",
+          "settings": { "title": "Free shipping", "requires": "min_amount", "minAmount": "50" }
+        }
+      ]
+    },
+    {
+      "name": "Rest of world",
+      "order": 9,
+      "locations": [],
+      "methods": [
+        { "methodId": "flat_rate", "settings": { "title": "International", "cost": "15" } }
+      ]
+    }
+  ]
+}

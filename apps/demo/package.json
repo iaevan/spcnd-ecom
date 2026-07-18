@@ -1,0 +1,30 @@
+{
+  "name": "@spacendigital/demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "spcnd-ecom demo storefront: Astro SSR store wired end-to-end through the library",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "node ./dist/server/entry.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.0.0",
+    "@spacendigital/analytics": "workspace:*",
+    "@spacendigital/api": "workspace:*",
+    "@spacendigital/astro": "workspace:*",
+    "@spacendigital/core": "workspace:*",
+    "@spacendigital/db": "workspace:*",
+    "@spacendigital/email": "workspace:*",
+    "@spacendigital/payments": "workspace:*",
+    "@spacendigital/reviews": "workspace:*",
+    "@spacendigital/shipping": "workspace:*",
+    "@spacendigital/tax": "workspace:*",
+    "astro": "^5.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}
