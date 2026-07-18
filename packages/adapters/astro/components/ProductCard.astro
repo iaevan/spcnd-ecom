@@ -1,0 +1,16 @@
+---
+import Price from './Price.astro';
+interface Props {
+  product: { name: string; slug: string; price: string | null; regularPrice: string | null };
+}
+const { product } = Astro.props;
+---
+<a class="spcnd-card" href={`/product/${product.slug}/`}>
+  <h3>{product.name}</h3>
+  <Price price={product.price} regularPrice={product.regularPrice} />
+</a>
+<style>
+  .spcnd-card { display: block; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1rem; text-decoration: none; color: inherit; }
+  .spcnd-card:hover { border-color: #7c3aed; }
+  .spcnd-card h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+</style>

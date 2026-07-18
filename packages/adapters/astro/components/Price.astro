@@ -1,0 +1,18 @@
+---
+import { formatPrice } from '@spacendigital/astro';
+interface Props {
+  price: string | null;
+  regularPrice?: string | null;
+  symbol?: string;
+}
+const { price, regularPrice, symbol = '$' } = Astro.props;
+const onSale = regularPrice && price && Number(price) < Number(regularPrice);
+---
+<span class="spcnd-price">
+  {onSale && <del>{formatPrice(regularPrice ?? null, symbol)}</del>}
+  <ins>{formatPrice(price, symbol)}</ins>
+</span>
+<style>
+  .spcnd-price del { opacity: 0.5; margin-right: 0.4em; }
+  .spcnd-price ins { text-decoration: none; font-weight: 600; }
+</style>

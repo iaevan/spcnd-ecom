@@ -1,0 +1,27 @@
+---
+interface Props {
+  productId: number;
+  label?: string;
+}
+const { productId, label = 'Add to cart' } = Astro.props;
+---
+<button class="spcnd-add" data-product-id={productId} data-testid="add-to-cart">{label}</button>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.spcnd-add').forEach((button) => {
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      await fetch('/api/store/cart/items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: Number(button.dataset.productId), quantity: 1 }),
+      });
+      button.textContent = 'Added ✓';
+      button.disabled = false;
+      window.dispatchEvent(new CustomEvent('spcnd:cart-updated'));
+    });
+  });
+</script>
+<style>
+  .spcnd-add { background: #7c3aed; color: #fff; border: 0; border-radius: 6px; padding: 0.6rem 1rem; cursor: pointer; }
+  .spcnd-add:disabled { opacity: 0.6; }
+</style>
