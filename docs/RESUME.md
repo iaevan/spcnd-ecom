@@ -58,8 +58,15 @@ AGENTS.original.md is NOT in the repo — see DECISION-1; the reports replace it
 **Step 1 landed (commits 801c6db…this one): all step-1 services below are
 implemented, exported from index.ts via createSpcndCore, and covered by 37
 core tests (58 workspace-wide, all green).** Remaining inside step 1: nothing
-Fable-side; the i18n sub-step stays deferred (SECURITY_WORK S8). Next session
-starts at NEXT STEPS **step 2 (compat-wc)**.
+Fable-side; the i18n sub-step stays deferred (SECURITY_WORK S8).
+
+**Step 2 (compat-wc) is DONE** — `@spacendigital/compat-wc` ships the alias
+table (~150 static names + dynamic families incl. `{prop}` getter bridge),
+createWcCompat (doAction/applyFilters/compat.on over the shared bus), EAV
+meta shims, get_option/update_option + wc_price shims, and the WC REST v3
+serializers for products/orders/customers/coupons/reviews with relation
+loaders. 13 package tests; workspace 71 tests green, depcruise clean.
+Next session starts at NEXT STEPS **step 3 (auth stub)** then **step 4 (tax)**.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
