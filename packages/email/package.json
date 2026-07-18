@@ -1,0 +1,41 @@
+{
+  "name": "@spacendigital/email",
+  "version": "0.1.0",
+  "description": "Transactional email for spcnd-ecom: the 22 WC templates as React components, console/SMTP/Resend/SendGrid transports, event-driven sending with queue integration",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./transports": {
+      "types": "./dist/transports.d.ts",
+      "default": "./dist/transports.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@spacendigital/core": "workspace:*",
+    "@spacendigital/plugin-system": "workspace:*",
+    "@spacendigital/types": "workspace:*",
+    "nodemailer": "^6.9.16",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@spacendigital/db": "workspace:*",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
