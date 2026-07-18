@@ -320,7 +320,13 @@ function mapWcProductBody(body: Record<string, unknown>): Record<string, unknown
     sold_individually: 'soldIndividually',
   };
   for (const [wcKey, key] of Object.entries(map)) {
-    if (body[wcKey] !== undefined) out[key] = body[wcKey];
+    if (body[wcKey] === undefined) continue;
+    // WC sends '' to clear a price; the money columns want null.
+    if ((wcKey === 'regular_price' || wcKey === 'sale_price') && body[wcKey] === '') {
+      out[key] = null;
+      continue;
+    }
+    out[key] = body[wcKey];
   }
   if (Array.isArray(body.categories)) {
     out.categoryIds = (body.categories as { id: number }[]).map((c) => c.id);

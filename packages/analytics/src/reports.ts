@@ -87,7 +87,8 @@ export async function revenueReport(db: SpcndDb, range: ReportRange = {}): Promi
     bucket.netRevenueMinor += minor(row.netTotal);
     intervals.set(day, bucket);
   }
-  const refundsMinor = refunds.reduce((sum, r) => sum + aggMinor(db.dialect, r.amount), 0);
+  // Row values come through the drizzle money mapper (strings) — not SQL sums.
+  const refundsMinor = refunds.reduce((sum, r) => sum + minor(r.amount), 0);
   return {
     ordersCount: rows.length,
     numItemsSold: items,

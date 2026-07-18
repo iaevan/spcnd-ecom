@@ -1,3 +1,4 @@
+import AnalyticsPlugin from '@spacendigital/analytics';
 import { createSpcndCore, type SpcndCore } from '@spacendigital/core';
 import { migrate, sqlite } from '@spacendigital/db';
 import { describe, expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { createApi } from '../src/index.js';
 async function createApp() {
   const db = await sqlite(':memory:').connect();
   await migrate(db);
-  const core = await createSpcndCore({ db });
+  const core = await createSpcndCore({ db, plugins: [AnalyticsPlugin] });
   return { core, app: createApi(core) };
 }
 
