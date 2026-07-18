@@ -105,8 +105,21 @@ cart/coupon/checkout/order-received; bare `spcnd_session` cookie until S2),
 export, Node fs, SPA fallback). Admin surfaces sit behind the S6 dev-trust
 middleware — do not expose publicly until S6.
 
-Workspace: 13 packages, 105 tests green, depcruise clean.
-Next: NEXT STEPS **step 11 (ui + apps/admin)**, then 12 (adapters), 13 (demo).
+**Step 11 (ui + apps/admin) is DONE** — `@spacendigital/ui`: hand-rolled
+shadcn-style primitives (Button/Input/Select/Card/Badge/StatusBadge/Table/
+Field + money formatters). `apps/admin`: Vite + React + React Router +
+TanStack Query + Tailwind v4 + Recharts SPA at base `/spcnd-admin` (served
+by api's createAdminHandler): dashboard (revenue chart + leaderboards),
+products list/edit, orders list/detail (status change, notes, refunds),
+customers, coupons (create/delete), reviews, tax rates, shipping zones
+(add zone/methods), settings (general tab), webhooks (S3 notice), system
+status (shows SECURITY_WORK pending list), login page carrying the S4/S7
+marker (rejects all logins until auth lands). `vite build` green
+(dist ~669 kB js / 16 kB css). Email-settings tab + api-keys screen ride
+with S6/S7.
+
+Workspace: 15 turbo tasks green, 105 tests, depcruise clean.
+Next: NEXT STEPS **step 12 (adapters)**, then **13 (apps/demo + e2e)**.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
