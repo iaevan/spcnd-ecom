@@ -24,6 +24,31 @@ importers:
         specifier: ^3.1.4
         version: 3.2.7(@types/node@26.1.1)(tsx@4.23.1)
 
+  packages/analytics:
+    dependencies:
+      '@spacendigital/core':
+        specifier: workspace:*
+        version: link:../core
+      '@spacendigital/db':
+        specifier: workspace:*
+        version: link:../db
+      '@spacendigital/plugin-system':
+        specifier: workspace:*
+        version: link:../plugin-system
+      '@spacendigital/types':
+        specifier: workspace:*
+        version: link:../types
+      drizzle-orm:
+        specifier: ^0.44.2
+        version: 0.44.7(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@11.10.0)(mysql2@3.23.0(@types/node@26.1.1))(pg@8.22.0)
+    devDependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.1.4
+        version: 3.2.7(@types/node@26.1.1)(tsx@4.23.1)
+
   packages/auth:
     dependencies:
       '@spacendigital/core':
