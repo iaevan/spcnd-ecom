@@ -1,0 +1,27 @@
+{
+  "name": "@spacendigital/auth",
+  "version": "0.1.0",
+  "description": "Auth package for spcnd-ecom (stub — full implementation tracked in docs/SECURITY_WORK.md item S4)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@spacendigital/core": "workspace:*",
+    "@spacendigital/plugin-system": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

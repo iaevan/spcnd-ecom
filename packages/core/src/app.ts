@@ -51,6 +51,7 @@ import { MemorySessionStore } from './sessions/session-service.js';
 import { SettingsService } from './settings/service.js';
 
 /** DI tokens for the core services (plugins resolve these from the container). */
+export const SPCND_DB = createToken<SpcndDb>('SpcndDb');
 export const PRODUCT_SERVICE = createToken<ProductService>('ProductService');
 export const CUSTOMER_SERVICE = createToken<CustomerService>('CustomerService');
 export const COUPON_SERVICE = createToken<CouponService>('CouponService');
@@ -150,6 +151,7 @@ export async function createSpcndCore(config: SpcndCoreConfig): Promise<SpcndCor
   const queue = config.queueAdapter ?? new MemoryQueueAdapter();
   const search = config.searchAdapter ?? new DbSearchAdapter(db);
 
+  container.register(SPCND_DB, db);
   container.register(LOGGER, log);
   container.register(SESSION_STORE, sessions);
   container.register(CACHE_ADAPTER, cache);
