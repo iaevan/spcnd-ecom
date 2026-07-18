@@ -1,0 +1,106 @@
+---
+import { formatMinor } from '@spacendigital/astro';
+import Base from '../layouts/Base.astro';
+import { getApp } from '../lib/app.js';
+
+export const prerender = false;
+const { api, store } = await getApp();
+interface StoreCart {
+  items: { key: string; name: string; quantity: number; totalMinor: number }[];
+  totals: { totalMinor: number };
+}
+const cart = await store.fetchWithSession<StoreCart>(api, Astro.request, '/api/store/cart');
+if (cart.items.length === 0) return Astro.redirect('/cart');
+---
+<Base title="Checkout — spcnd demo store">
+  <h1>Checkout</h1>
+  <div style="display: grid; grid-template-columns: 1fr 280px; gap: 2rem;">
+    <form id="checkout-form">
+      <h2 style="font-size: 1rem;">Billing details</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem;">
+        <label>First name <input name="firstName" required data-testid="billing-first" /></label>
+        <label>Last name <input name="lastName" required /></label>
+      </div>
+      <label>Street address <input name="address1" required /></label>
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0 1rem;">
+        <label>City <input name="city" required /></label>
+        <label>State <input name="state" value="CA" /></label>
+        <label>Postcode <input name="postcode" required /></label>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem;">
+        <label>Country
+          <select name="country">
+            <option value="US" selected>United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+          </select>
+        </label>
+        <label>Phone <input name="phone" /></label>
+      </div>
+      <label>Email <input name="email" type="email" required data-testid="billing-email" /></label>
+      <label>Order note <input name="customerNote" /></label>
+
+      <h2 style="font-size: 1rem;">Payment</h2>
+      <label style="display: flex; align-items: center; gap: 0.5rem;">
+        <input type="radio" name="paymentMethod" value="cod" checked style="width: auto;" />
+        Cash on delivery
+      </label>
+
+      <p id="checkout-error" class="notice" style="display: none;"></p>
+      <button class="primary" type="submit" data-testid="place-order" style="margin-top: 1rem;">
+        Place order
+      </button>
+    </form>
+    <aside>
+      <h2 style="font-size: 1rem;">Your order</h2>
+      <table>
+        <tbody>
+          {cart.items.map((item) => (
+            <tr><td>{item.name} × {item.quantity}</td><td>{formatMinor(item.totalMinor)}</td></tr>
+          ))}
+          <tr><td><strong>Total</strong></td><td><strong>{formatMinor(cart.totals.totalMinor)}</strong></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 0.8rem; color: #71717a;">Taxes and shipping are calculated when you place the order.</p>
+    </aside>
+  </div>
+
+  <script>
+    document.querySelector<HTMLFormElement>('#checkout-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = new FormData(event.target as HTMLFormElement);
+      const field = (name: string) => String(form.get(name) ?? '');
+      const payload = {
+        billing: {
+          firstName: field('firstName'),
+          lastName: field('lastName'),
+          address1: field('address1'),
+          city: field('city'),
+          state: field('state'),
+          postcode: field('postcode'),
+          country: field('country'),
+          email: field('email'),
+          phone: field('phone'),
+        },
+        paymentMethod: field('paymentMethod'),
+        customerNote: field('customerNote') || undefined,
+      };
+      const response = await fetch('/api/store/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const body = await response.json();
+      if (!response.ok) {
+        const error = document.querySelector<HTMLElement>('#checkout-error');
+        if (error) {
+          error.textContent = body.message ?? 'Checkout failed';
+          error.style.display = 'block';
+        }
+        return;
+      }
+      window.location.href = `/thank-you?order=${body.orderId}&key=${body.orderKey}`;
+    });
+  </script>
+</Base>

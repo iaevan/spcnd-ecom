@@ -1,0 +1,29 @@
+---
+import { formatPrice } from '@spacendigital/astro';
+import Base from '../layouts/Base.astro';
+import { getApp } from '../lib/app.js';
+
+export const prerender = false;
+const { core } = await getApp();
+const orderId = Number(Astro.url.searchParams.get('order') ?? 0);
+const orderKey = Astro.url.searchParams.get('key') ?? '';
+const order = orderId > 0 ? await core.orders.find(orderId) : undefined;
+if (!order || order.orderKey !== orderKey) return Astro.redirect('/shop');
+const items = await core.orders.getItems(order.id, ['line_item']);
+---
+<Base title="Order received — spcnd demo store">
+  <h1 data-testid="thank-you">Thank you — your order has been received!</h1>
+  <p>
+    Order number: <strong data-testid="order-number">#{order.id}</strong> · Status:
+    <strong>{order.status}</strong> · Total: <strong>{formatPrice(order.total)}</strong>
+  </p>
+  <table style="max-width: 480px;">
+    <tbody>
+      {items.map((item) => (
+        <tr><td>{item.name} × {item.quantity}</td><td>{formatPrice(item.total)}</td></tr>
+      ))}
+    </tbody>
+  </table>
+  <p>A confirmation email has been sent to {order.billingEmail} (console transport in the demo).</p>
+  <p><a href="/shop">Continue shopping →</a></p>
+</Base>

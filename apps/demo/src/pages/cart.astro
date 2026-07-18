@@ -1,0 +1,97 @@
+---
+import { formatMinor } from '@spacendigital/astro';
+import Base from '../layouts/Base.astro';
+import { getApp } from '../lib/app.js';
+
+export const prerender = false;
+const { api, store } = await getApp();
+interface StoreCart {
+  items: { key: string; name: string; quantity: number; totalMinor: number }[];
+  coupons: string[];
+  totals: {
+    subtotalMinor: number;
+    discountTotalMinor: number;
+    shippingTotalMinor: number;
+    totalTaxMinor: number;
+    totalMinor: number;
+  };
+}
+const cart = await store.fetchWithSession<StoreCart>(api, Astro.request, '/api/store/cart');
+---
+<Base title="Cart — spcnd demo store">
+  <h1>Your cart</h1>
+  {cart.items.length === 0 ? (
+    <p data-testid="cart-empty">Your cart is empty. <a href="/shop">Back to the shop</a>.</p>
+  ) : (
+    <div>
+      <table data-testid="cart-table">
+        <thead>
+          <tr><th>Item</th><th>Qty</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody>
+          {cart.items.map((item) => (
+            <tr data-key={item.key}>
+              <td>{item.name}</td>
+              <td>
+                <input type="number" min="0" value={item.quantity} data-qty={item.key} style="width: 4rem;" />
+              </td>
+              <td>{formatMinor(item.totalMinor)}</td>
+              <td><button data-remove={item.key}>✕</button></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <form id="coupon-form" style="display: flex; gap: 0.5rem; margin: 1rem 0; max-width: 320px;">
+        <input name="code" placeholder="Coupon code" data-testid="coupon-input" />
+        <button class="primary" type="submit">Apply</button>
+      </form>
+      {cart.coupons.length > 0 && <p>Applied: {cart.coupons.join(', ')}</p>}
+
+      <div style="text-align: right; margin-top: 1rem;">
+        <p>Subtotal: {formatMinor(cart.totals.subtotalMinor)}</p>
+        {cart.totals.discountTotalMinor > 0 && <p>Discount: −{formatMinor(cart.totals.discountTotalMinor)}</p>}
+        {cart.totals.totalTaxMinor > 0 && <p>Tax: {formatMinor(cart.totals.totalTaxMinor)}</p>}
+        <p style="font-size: 1.2rem; font-weight: 700;" data-testid="cart-total">
+          Total: {formatMinor(cart.totals.totalMinor)}
+        </p>
+        <a href="/checkout"><button class="primary" data-testid="to-checkout">Proceed to checkout</button></a>
+      </div>
+    </div>
+  )}
+
+  <script>
+    const reload = () => window.location.reload();
+    document.querySelectorAll<HTMLInputElement>('input[data-qty]').forEach((input) => {
+      input.addEventListener('change', async () => {
+        await fetch(`/api/store/cart/items/${input.dataset.qty}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantity: Number(input.value) }),
+        });
+        reload();
+      });
+    });
+    document.querySelectorAll<HTMLButtonElement>('button[data-remove]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        await fetch(`/api/store/cart/items/${button.dataset.remove}`, { method: 'DELETE' });
+        reload();
+      });
+    });
+    document.querySelector<HTMLFormElement>('#coupon-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const code = new FormData(event.target as HTMLFormElement).get('code');
+      const response = await fetch('/api/store/cart/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({ message: 'Invalid coupon' }));
+        alert(body.message ?? 'Invalid coupon');
+        return;
+      }
+      reload();
+    });
+  </script>
+</Base>
