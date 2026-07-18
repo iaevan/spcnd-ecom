@@ -49,6 +49,40 @@ importers:
         specifier: ^3.1.4
         version: 3.2.7(@types/node@26.1.1)(tsx@4.23.1)
 
+  packages/api:
+    dependencies:
+      '@spacendigital/analytics':
+        specifier: workspace:*
+        version: link:../analytics
+      '@spacendigital/compat-wc':
+        specifier: workspace:*
+        version: link:../compat-wc
+      '@spacendigital/core':
+        specifier: workspace:*
+        version: link:../core
+      '@spacendigital/db':
+        specifier: workspace:*
+        version: link:../db
+      '@spacendigital/plugin-system':
+        specifier: workspace:*
+        version: link:../plugin-system
+      '@spacendigital/types':
+        specifier: workspace:*
+        version: link:../types
+      drizzle-orm:
+        specifier: ^0.44.2
+        version: 0.44.7(@types/better-sqlite3@7.6.13)(@types/pg@8.20.0)(better-sqlite3@11.10.0)(mysql2@3.23.0(@types/node@26.1.1))(pg@8.22.0)
+      hono:
+        specifier: ^4.6.14
+        version: 4.12.30
+    devDependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.1.4
+        version: 3.2.7(@types/node@26.1.1)(tsx@4.23.1)
+
   packages/auth:
     dependencies:
       '@spacendigital/core':
@@ -1370,6 +1404,10 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
+  hono@4.12.30:
+    resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
+    engines: {node: '>=16.9.0'}
+
   iconv-lite@0.7.3:
     resolution: {integrity: sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ==}
     engines: {node: '>=0.10.0'}
@@ -2592,6 +2630,8 @@ snapshots:
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
+
+  hono@4.12.30: {}
 
   iconv-lite@0.7.3:
     dependencies:

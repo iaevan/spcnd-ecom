@@ -18,6 +18,7 @@ import {
   variationsReport,
 } from '@spacendigital/analytics';
 import { asc, eq } from 'drizzle-orm';
+import type { Context } from 'hono';
 import { createRouter, intParam, pageQuery, setListHeaders } from '../shared.js';
 
 /**
@@ -236,7 +237,7 @@ export function storeAdminRoutes() {
   return app;
 }
 
-function rangeQuery(c: Parameters<Parameters<ReturnType<typeof createRouter>['get']>[1]>[0]) {
+function rangeQuery(c: Context) {
   return {
     after: c.req.query('after'),
     before: c.req.query('before'),

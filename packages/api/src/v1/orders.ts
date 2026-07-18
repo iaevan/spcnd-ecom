@@ -1,4 +1,5 @@
-import type { OrderListQuery, OrderStatus } from '@spacendigital/core';
+import type { OrderListQuery } from '@spacendigital/core';
+import type { OrderStatus } from '@spacendigital/types';
 import { createRouter, intParam, pageQuery, setListHeaders } from '../shared.js';
 
 /** /api/v1 orders + notes + refunds + status transitions. */

@@ -29,6 +29,7 @@
     "@spacendigital/db": "workspace:*",
     "@spacendigital/plugin-system": "workspace:*",
     "@spacendigital/types": "workspace:*",
+    "drizzle-orm": "^0.44.2",
     "hono": "^4.6.14"
   },
   "devDependencies": {
