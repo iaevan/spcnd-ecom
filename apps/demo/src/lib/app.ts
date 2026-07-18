@@ -1,5 +1,6 @@
 import { mkdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createRequire } from 'node:module';
+import { dirname, resolve } from 'node:path';
 import AnalyticsPlugin from '@spacendigital/analytics';
 import { createApi } from '@spacendigital/api';
 import { storefront } from '@spacendigital/astro';
@@ -34,7 +35,11 @@ async function boot(): Promise<DemoApp> {
   const dataDir = resolve(process.cwd(), '.data');
   mkdirSync(dataDir, { recursive: true });
   const db = await sqlite(process.env.SPCND_DB ?? resolve(dataDir, 'demo.db')).connect();
-  await migrate(db);
+  // The db package may be bundled into the server chunk; resolve its real
+  // on-disk location so the shipped migration files are found.
+  const require = createRequire(import.meta.url);
+  const dbEntry = require.resolve('@spacendigital/db');
+  await migrate(db, { dir: resolve(dirname(dbEntry), '../migrations/sqlite') });
   await runSeed(db, seed as unknown as SeedData);
   const core = await createSpcndCore({
     db,

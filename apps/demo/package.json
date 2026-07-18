@@ -22,7 +22,8 @@
     "@spacendigital/reviews": "workspace:*",
     "@spacendigital/shipping": "workspace:*",
     "@spacendigital/tax": "workspace:*",
-    "astro": "^5.1.0"
+    "astro": "^5.1.0",
+    "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1"
