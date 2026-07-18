@@ -1,0 +1,15 @@
+---
+import ProductCard from '@spacendigital/astro/components/ProductCard.astro';
+import Base from '../layouts/Base.astro';
+import { getApp } from '../lib/app.js';
+
+export const prerender = false;
+const { store } = await getApp();
+const result = await store.listProducts({ perPage: 24 });
+---
+<Base title="Shop — spcnd demo store">
+  <h1>Shop</h1>
+  <div class="grid" data-testid="product-grid">
+    {result.items.map((product) => <ProductCard product={product} />)}
+  </div>
+</Base>

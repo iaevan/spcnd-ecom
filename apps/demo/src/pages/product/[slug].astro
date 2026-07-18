@@ -1,0 +1,41 @@
+---
+import AddToCartButton from '@spacendigital/astro/components/AddToCartButton.astro';
+import Price from '@spacendigital/astro/components/Price.astro';
+import Base from '../../layouts/Base.astro';
+import { getApp } from '../../lib/app.js';
+
+export const prerender = false;
+const { store, core } = await getApp();
+const product = await store.productBySlug(Astro.params.slug ?? '');
+if (!product) return new Response('Not found', { status: 404 });
+const relatedIds = await core.products.getRelatedIds(product.id, 4);
+const related = [];
+for (const id of relatedIds) {
+  const p = await core.products.find(id);
+  if (p) related.push(p);
+}
+---
+<Base title={`${product.name} — spcnd demo store`}>
+  <nav style="font-size: 0.85rem; color: #71717a;"><a href="/shop">Shop</a> / {product.name}</nav>
+  <h1 data-testid="product-name">{product.name}</h1>
+  <p style="font-size: 1.3rem;">
+    <Price price={product.price} regularPrice={product.regularPrice} />
+  </p>
+  <p>{product.shortDescription}</p>
+  <AddToCartButton productId={product.id} />
+  <section style="margin-top: 2rem;">
+    <h2 style="font-size: 1rem;">Details</h2>
+    <p>{product.description}</p>
+    {product.sku && <p style="color: #71717a; font-size: 0.85rem;">SKU: {product.sku}</p>}
+  </section>
+  {related.length > 0 && (
+    <section style="margin-top: 2rem;">
+      <h2 style="font-size: 1rem;">Related products</h2>
+      <div class="grid">
+        {related.map((p) => (
+          <a href={`/product/${p.slug}/`}>{p.name}</a>
+        ))}
+      </div>
+    </section>
+  )}
+</Base>

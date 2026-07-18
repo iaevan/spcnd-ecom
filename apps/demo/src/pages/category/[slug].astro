@@ -1,0 +1,18 @@
+---
+import ProductCard from '@spacendigital/astro/components/ProductCard.astro';
+import Base from '../../layouts/Base.astro';
+import { getApp } from '../../lib/app.js';
+
+export const prerender = false;
+const { store } = await getApp();
+const category = await store.categoryBySlug(Astro.params.slug ?? '');
+if (!category) return new Response('Not found', { status: 404 });
+const result = await store.listProducts({ categoryId: category.id, perPage: 24 });
+---
+<Base title={`${category.name} — spcnd demo store`}>
+  <h1>{category.name}</h1>
+  {category.description && <p>{category.description}</p>}
+  <div class="grid">
+    {result.items.map((product) => <ProductCard product={product} />)}
+  </div>
+</Base>
