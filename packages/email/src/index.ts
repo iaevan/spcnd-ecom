@@ -13,11 +13,11 @@ import {
   SETTINGS_SERVICE,
 } from '@spacendigital/core';
 import { defineSpcndPlugin } from '@spacendigital/plugin-system';
-import { DbEmailService } from './service.jsx';
+import { DbEmailService } from './service.js';
 import { ConsoleTransport } from './transports.js';
 
-export { EMAIL_TEMPLATES, type EmailTemplateId } from './templates/definitions.jsx';
-export { DbEmailService, type TemplateSettings } from './service.jsx';
+export { EMAIL_TEMPLATES, type EmailTemplateId } from './templates/definitions.js';
+export { DbEmailService, type TemplateSettings } from './service.js';
 export { ConsoleTransport, ResendTransport, SendGridTransport, SmtpTransport } from './transports.js';
 
 /**

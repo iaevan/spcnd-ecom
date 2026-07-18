@@ -12,8 +12,8 @@ import {
   EMAIL_TEMPLATES,
   type EmailTemplateId,
   type TemplatePayload,
-} from './templates/definitions.jsx';
-import type { EmailTheme, OrderEmailData } from './templates/shared.jsx';
+} from './templates/definitions.js';
+import type { EmailTheme, OrderEmailData } from './templates/shared.js';
 
 /**
  * EmailService implementation: per-template config from the email_settings

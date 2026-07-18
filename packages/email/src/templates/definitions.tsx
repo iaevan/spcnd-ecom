@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Addresses, type EmailTheme, EmailLayout, type OrderEmailData, OrderTable } from './shared.jsx';
+import { Addresses, type EmailTheme, EmailLayout, type OrderEmailData, OrderTable } from './shared.js';
 
 /**
  * The 22 WC transactional emails (feature-parity report §3.2), each a React

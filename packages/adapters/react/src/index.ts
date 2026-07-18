@@ -1,2 +1,2 @@
 export * from './client.js';
-export * from './hooks.jsx';
+export * from './hooks.js';
