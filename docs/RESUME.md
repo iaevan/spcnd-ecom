@@ -86,8 +86,14 @@ nodemailer, EDGE gap 2)/Resend/SendGrid transports, DbEmailService with
 per-template email_settings config + WC placeholders, EmailPlugin wiring the
 §3.2 trigger table (new_order guarded once via order_events).
 
-Workspace: 11 packages, 95 tests green, depcruise clean (109 modules).
-Next session starts at NEXT STEPS **step 9 (analytics)** then **step 10 (api)**.
+**Step 9 (analytics) is DONE** — `@spacendigital/analytics`: DbAnalyticsSync
+(same-txn order_stats / product / tax / coupon lookups, customer_lookup,
+category trees, returning-customer detection), rebuildAllLookups() for the
+CLI, 10 report queries + leaderboards with dialect-aware money aggregation,
+AnalyticsPlugin resyncing on status/customer events.
+
+Workspace: 12 packages, 100 tests green, depcruise clean.
+Next session starts at NEXT STEPS **step 10 (api — Hono REST v1 + v3)**.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
