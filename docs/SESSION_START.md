@@ -35,6 +35,22 @@ The npm-scope rename from `@spcnd-ecom/*` to `@spacendigital/*` was completed in
 `514b16b` and verified (21 tests still green). Do not re-run it. Continue directly to
 RESUME.md step 1.
 
+## ⚠ EDGE_V2_HARDENING.md — read before writing `media/`, `downloads/`, `webhooks/`, `sessions/`, scheduled jobs
+
+`docs/EDGE_V2_HARDENING.md` lists 7 edge-readiness constraints v1 must honor so v2 on
+Cloudflare Workers is a 5-10 day adapter-only lift, not a 3-4 week rewrite. Key points:
+- `MediaAdapter` / `QueueAdapter` / `SessionStore` are interfaces — never hardcode
+  Node-only APIs (`fs.createReadStream`, `setInterval`, `process.env`) at call sites.
+- `downloads/download-service.ts` routes through `MediaAdapter.stream()` or
+  `signedUrl()`, not `fs` directly.
+- `webhooks/webhook-service.ts` enqueues deliveries via `QueueAdapter.enqueue()` —
+  never inline `fetch()` inside the webhook-topic handler.
+- Scheduled jobs (cleanup, retention, abandoned-cart) are a `ScheduledJobs` registry
+  with name + cron string + `run()`, not bare `setInterval` calls in constructors.
+- Stripe/PayPal webhook verification `request.clone()`s before reading body.
+
+Read the file for the full list + verification greps.
+
 ## ⚠ SECURITY BLOCK — read this before doing anything
 
 **Do NOT read `docs/SECURITY_WORK.md`.** That file contains the trigger words that trip

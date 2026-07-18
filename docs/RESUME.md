@@ -3,7 +3,9 @@
 Working notes for continuing the spcnd-ecom build across sessions. Read this, then
 `docs/AGENTS.md` (the spec — skip §6 and §7 entirely on Fable 5; those sections
 describe security-adjacent work that is deferred, see `docs/SECURITY_WORK.md`),
-then `docs/DECISIONS.md`.
+then `docs/DECISIONS.md`. Also read `docs/EDGE_V2_HARDENING.md` before writing any
+file that touches media, downloads, webhooks, sessions, or scheduled jobs — it lists
+7 constraints that keep v2 on Cloudflare Workers cheap.
 
 The five `docs/woocommerce-*.md` files are the behavioral reference (the original
 AGENTS.original.md is NOT in the repo — see DECISION-1; the reports replace it).
@@ -119,7 +121,13 @@ Written so far (all under packages/core/src/):
      `/* TODO:security-blocked — see SECURITY_WORK item S3 */` export stub. The full
      implementation belongs in S3.
    - media/media-service.ts, downloads/download-service.ts (grant on payment_complete or
-     processing per settings; downloads_remaining decrement)
+     processing per settings; downloads_remaining decrement). **⚠ Read
+     `docs/EDGE_V2_HARDENING.md` Gap 3 + 4 before writing these.** The `MediaAdapter`
+     interface in `core/services/interfaces.ts` must expose `stream(file)` /
+     `signedUrl(file, ttl)`; `download-service.ts` MUST route through those, never
+     hardcode `fs.createReadStream` or `node:fs` at the call site. The local adapter
+     implements `stream` via `fs.createReadStream`; `signedUrl` returns a 302
+     target. R2 adapter comes in v2 — keep the interface clean.
    - **SKIP `sessions/session-service.ts`** — write the file with a single
      `/* TODO:security-blocked — see SECURITY_WORK item S2 */` export stub. The SessionStore
      impl belongs in S2. (Cart and checkout can import a placeholder SessionStore that returns
@@ -127,7 +135,14 @@ Written so far (all under packages/core/src/):
    - queue/memory-queue.ts, cache/memory-cache.ts (LRU), search/db-search.ts (FTS per dialect +
      LIKE fallback), seo/jsonld.ts, gdpr/exporters.ts + erasers + anonymize, app.ts
      (`createSpcndCore(config)`: connect db, run migrations opt, bus, container, settings,
-     services, plugin setup incl. optional discovery), index.ts exporting everything
+     services, plugin setup incl. optional discovery), index.ts exporting everything.
+     **⚠ Read `docs/EDGE_V2_HARDENING.md` Gap 5 + 6 before writing `queue/memory-queue.ts`
+     and the GDPR/analytics scheduled jobs.** `QueueAdapter` interface keeps deliveries
+     off the request thread (Workers have a 30s CPU limit per request). Scheduled jobs
+     (cleanup, retention, abandoned-cart) must be a `ScheduledJobs` registry — each job
+     is `{ name, schedule: cron-string, run(app) }`, not a bare `setInterval` inside a
+     service constructor. v1 wires them up via `setInterval`; v2 wires them via
+     Cloudflare Cron Triggers calling the same registry.
 
    **Acceptance for step 1:** `pnpm --filter @spacendigital/core build` passes; a test file
    exists for cart, coupons, discounts, checkout, orders, catalog, customers that exercises the

@@ -105,6 +105,15 @@ Webhook topics: 17 built-in (coupon.*, customer.*, order.*, product.*) plus
 - Saved payment methods CRUD (WC: `payment_tokens` table) — list, add, set-default,
   delete. Tokenization shape per `docs/woocommerce_comprehensive_report.md` §7.6.
 
+**Edge-readiness constraint (per `docs/EDGE_V2_HARDENING.md` Gap 7):** Stripe and
+PayPal webhook signature verification requires reading the inbound request body.
+On Cloudflare Workers (v2 target), a `ReadableStream` body can only be read once.
+The gateway webhook handler MUST `request.clone()` before reading the body for
+signature verification, then pass either the original or the cloned request
+downstream. This pattern is portable across Node (v1) and Workers (v2). Do not
+write a Node-only signature verification that consumes the body without cloning —
+it will break v2.
+
 ### S6. api/api-keys routes
 
 The Hono routes for admin access-token CRUD: `POST /api/v1/api-keys`,
