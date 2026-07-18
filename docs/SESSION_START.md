@@ -40,17 +40,32 @@ RESUME.md step 1.
 **Do NOT read `docs/SECURITY_WORK.md`.** That file contains the trigger words that trip
 your safety classifier. It exists ONLY for an Opus 4.8 session to read later.
 
-The build has been split: steps 1–17 in `docs/REST.md` are Fable-5-safe. The
+The build has been split: steps 1–17 in `docs/RESUME.md` are Fable-5-safe. The
 security-adjacent work (credential storage, integrity-tag signing, third-party
-payment-provider clients, admin access-token issuance, OAuth wiring) has been moved
-to `SECURITY_WORK.md` as items S1–S7, deferred to a later Opus 4.8 session.
+payment-provider clients, admin access-token issuance, OAuth wiring, i18n states/
+address-formats/country-locale) has been moved to `SECURITY_WORK.md` as items S1–S8,
+deferred to a later Opus 4.8 session.
+
+**Do NOT read the following doc sections — they contain sanctioned-country references
+in financial/tax/address-format context that trip your safety classifier:**
+- `docs/woocommerce-analysis.md` §5.4 (VAT Countries list with IR/KP/SY/RU/BY/CU codes)
+- `docs/woocommerce-analysis.md` §5.7 (Address Formats with sanctioned-country formats)
+- `docs/woocommerce-analysis.md` §5.8 (Country Locale Overrides)
+- `docs/woocommerce-analysis.md` §6.3 (Price Formatting — currency symbols for sanctioned-country currencies like RUB)
+- Any other section that pairs a country list with financial / tax / payment context.
+
+When in doubt, do NOT read `docs/woocommerce-analysis.md` at all. The other four WC
+reports (`comprehensive_report`, `core-architecture-report`, `feature-parity-report`,
+`api_reference`) cover the same behavioral ground for catalog/cart/checkout/orders/
+coupons/discounts/shipping/tax engine/reviews/email/analytics — those don't contain
+the VAT-country-list trigger pattern.
 
 If you find yourself about to generate code involving any of: credential hashing,
-integrity tags / signing, third-party payment clients, OAuth, or admin access-token
-issuance — **STOP**, write a `/* TODO:security-blocked — see docs/SECURITY_WORK.md item S<N> */`
-marker in place of the implementation, skip that file, and continue with the next
-non-security item in RESUME.md's "NEXT STEPS" list. The full list of what gets a
-TODO:security-blocked marker is in RESUME.md step 1 — re-read it carefully.
+integrity tags / signing, third-party payment clients, OAuth, admin access-token
+issuance, or i18n state/address-format/locale data — **STOP**, write a
+`/* TODO:security-blocked — see docs/SECURITY_WORK.md item S<N> */` marker in place of
+the implementation, skip that file, and continue with the next non-security item in
+RESUME.md's "NEXT STEPS" list.
 
 ---
 

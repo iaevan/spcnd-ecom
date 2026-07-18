@@ -73,8 +73,16 @@ Written so far (all under packages/core/src/):
 ## NEXT STEPS (in order — spec §13) — every step below is Fable-5-safe
 
 1. **Finish the non-security parts of core** (then add core to vitest + write tests):
-   - i18n/states.ts (US/CA/AU/BR/MX/IN/JP/IE/NZ/ES/IT/ZA at minimum), i18n/address-formats.ts
-     (WC's ~40 country format strings), i18n/index.ts
+   - **SKIP the entire i18n sub-step** — `i18n/states.ts`, `i18n/address-formats.ts`,
+     `i18n/country-locale.ts`, `i18n/index.ts`. **Deferred to SECURITY_WORK.md item S8
+     (run on Opus 4.8).** The WC analysis reports that describe these surfaces contain
+     OFAC sanctioned-country codes in tax/VAT context, which trip your safety classifier.
+     `i18n/countries.ts` and `i18n/currencies.ts` are already written and committed —
+     those are sufficient for catalog/cart/checkout to proceed. Code that imports from
+     `i18n/index.ts` should import from `i18n/countries.ts` and `i18n/currencies.ts`
+     directly for now; S8 will create the barrel.
+   - **Do NOT read `docs/woocommerce-analysis.md` §5 — it contains the trigger.** For
+     i18n behavior reference on Opus 4.8, read it there; on Fable 5, skip it.
    - catalog/product-service.ts — CRUD w/ single write path syncing product_meta_lookup in same
      txn; price resolution (sale windows); stock ops (reduce/restore/set + events); visibility;
      related/upsell/crosssell queries; SKU lookup

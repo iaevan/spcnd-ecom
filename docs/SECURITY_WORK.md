@@ -116,10 +116,50 @@ HTTP Basic auth (consumer_key + consumer_secret) for `/api/v3/*` compat.
 Admin SPA login flow (calls the auth API). Admin-SPA API-key CRUD screen. Per
 `docs/AGENTS.md` §9.
 
+### S8. i18n completion — states, address-formats, country locale overrides
+
+NOT security work, but deferred for the same reason: the WC analysis reports
+that describe this surface (`docs/woocommerce-analysis.md` §5.4 VAT Countries
+list, §5.7 Address Formats, §5.8 Country Locale Overrides) contain OFAC
+sanctioned-country codes (IR, KP, SY, CU, RU, BY) in financial/tax context,
+which trip Fable 5's safety classifier. Verified — every resume attempt on
+this sub-step blocked with "Output blocked by content filtering policy".
+
+Already done in `@spacendigital/core` (Fable wrote these safely):
+- `i18n/countries.ts` — 249 ISO-3166-1 countries
+- `i18n/currencies.ts` — ~160 currencies with symbols
+
+Still needed (do these on Opus 4.8):
+- `i18n/states.ts` — at minimum US, CA, AU, BR, MX, IN, JP, IE, NZ, ES, IT, ZA.
+  Reference: WC's `i18n/states.php` shape (country code → {state code → name}).
+  Use CLDR data where possible; do NOT withhold sanctioned-country states
+  (this is a commerce library, not a sanctioned-trade tool — Opus can write it).
+- `i18n/address-formats.ts` — WC's ~40 country address format strings per
+  `docs/woocommerce-analysis.md` §5.7. Default format is
+  `{name}\n{company}\n{address_1}\n{address_2}\n{city}\n{state}\n{postcode}\n{country}`.
+  US uses `{city}, {state_code} {postcode}`. JP, CN, FR, DE, HU have specific
+  formats. Available placeholders: `{first_name}`, `{last_name}`, `{name}`,
+  `{company}`, `{address_1}`, `{address_2}`, `{city}`, `{state}`, `{postcode}`,
+  `{country}` plus `_upper` and `_code` variants.
+- `i18n/country-locale.ts` — 80+ country locale overrides per WC's
+  `get_country_locale()`. Field priority reordering (JP, HU reverse
+  first/last name), hidden fields (AT/BE/FR/NL hide `state`), label overrides
+  (US→"State"/"ZIP Code", CA→"Province"/"Postal code"), required field flags.
+  Reference: `docs/woocommerce-analysis.md` §5.8.
+- `i18n/index.ts` — re-export barrel.
+- Tests: `i18n/states.test.ts` (US/CA/AU/JP at minimum exercise state lookup),
+  `i18n/address-formats.test.ts` (US, JP, default format rendering), 
+  `i18n/country-locale.test.ts` (priority reordering, hidden field, label override).
+
+Verification:
+- `pnpm --filter @spacendigital/core build && pnpm --filter @spacendigital/core test`
+  all green. Tests cover at least one country per address format and per
+  locale-override category.
+
 ## Sequence
 
 After `docs/RESUME.md` step 14 is done (the entire non-security build is green),
-run a fresh session on **Opus 4.8** (NOT Fable 5) and work through S1 → S7 in
+run a fresh session on **Opus 4.8** (NOT Fable 5) and work through S1 → S8 in
 order. Each S-step gets its own commit; push to `main` per the working rules.
 
 ## Verification per S-step
@@ -135,6 +175,7 @@ order. Each S-step gets its own commit; push to `main` per the working rules.
   happy path + error path.
 - S6 → integration test via the v1 API against sqlite.
 - S7 → Playwright e2e: login flow, API-key CRUD.
+- S8 → unit tests as specified above.
 
 ## Working rules (same as RESUME.md)
 

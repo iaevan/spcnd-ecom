@@ -14,13 +14,17 @@ the new text against the trigger list (anything in `docs/SECURITY_WORK.md`).
 
 ---
 
-Read `docs/SESSION_START.md` and follow its resume sequence exactly. The scope-rename task at the top of SESSION_START.md is already done in commit `514b16b` — skip it. The security-block note at the top is critical: do NOT read `docs/SECURITY_WORK.md`.
+Read `docs/SESSION_START.md` and follow its resume sequence exactly. The scope-rename task at the top of SESSION_START.md is already done in commit `514b16b` — skip it.
 
-Continue the build from `docs/RESUME.md` §"NEXT STEPS" step 1. Commit every ~10 file changes to `main` only — never create feature branches. Honor all 10 entries in `docs/DECISIONS.md`.
+**Critical**: The security-block note at the top of SESSION_START.md lists specific WC report sections you must NOT read because they trip your safety classifier (sanctioned-country references in financial/tax/address-format context). Adhere to that list.
 
-If you encounter a file or sub-step that is blocked by the safety classifier, write a `/* TODO:security-blocked — see docs/SECURITY_WORK.md item S<N> */` marker in place of the implementation, skip that file, and continue with the next item in RESUME.md. (RESUME.md already marks which items get these markers — follow those instructions.)
+The i18n sub-step in RESUME.md step 1 is **deferred to Opus 4.8** per SECURITY_WORK item S8 — skip it. Start directly on `catalog/product-service.ts`.
 
-Push with `git push -u origin main` (retry 4x with backoff on network errors only). Confirm you're starting on the i18n/states.ts file and proceed.
+Continue the build from `docs/RESUME.md` §"NEXT STEPS" step 1 (sub-step 2, catalog/product-service.ts). Commit every ~10 file changes to `main` only — never create feature branches. Honor all 10 entries in `docs/DECISIONS.md`.
+
+If you encounter a file or sub-step that is blocked by the safety classifier, write a `/* TODO:security-blocked — see docs/SECURITY_WORK.md item S<N> */` marker in place of the implementation, skip that file, and continue with the next item in RESUME.md.
+
+Push with `git push -u origin main` (retry 4x with backoff on network errors only). Confirm you're starting on the catalog/product-service.ts file and proceed.
 
 ---
 
