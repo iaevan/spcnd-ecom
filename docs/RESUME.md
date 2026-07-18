@@ -118,8 +118,27 @@ marker (rejects all logins until auth lands). `vite build` green
 (dist ~669 kB js / 16 kB css). Email-settings tab + api-keys screen ride
 with S6/S7.
 
-Workspace: 15 turbo tasks green, 105 tests, depcruise clean.
-Next: NEXT STEPS **step 12 (adapters)**, then **13 (apps/demo + e2e)**.
+**Steps 12–13 (adapters + apps/demo) are DONE** —
+- `@spacendigital/react`: framework-free typed client (products/cart/checkout
+  over /api/store + /api/v1) + SpcndProvider/useProducts/useCart hooks.
+- `@spacendigital/astro`: createApiRoute (Hono catch-all mount), storefront()
+  SSR helpers (list/bySlug/categories/tags + fetchWithSession cookie
+  forwarding), Price/ProductCard/AddToCartButton .astro components.
+- `@spacendigital/next`: v1 stub per spec.
+- `apps/demo`: Astro SSR store (node standalone) — boot seeds
+  seed.json (6 products/2 cats/1 coupon/2 zones/5 tax rates/2 users) and
+  composes the full plugin roster; pages shop/product/category/tag/cart/
+  checkout/thank-you/my-account + login/register/lost-password (S4/S7
+  notices); /api/* catch-all into createApi; /spcnd-admin serves the built
+  admin SPA via middleware. **Playwright e2e green (2/2): browse → coupon →
+  COD checkout → order 'processing' with discount via admin API + revenue
+  report.** Gotchas encoded in config: better-sqlite3/nodemailer are
+  vite ssr.external + a direct demo dep; migrations dir resolved via
+  createRequire because the db package gets bundled.
+
+Workspace: 19 turbo build tasks green, 105 unit/integration tests + 2 e2e,
+depcruise clean.
+Next: NEXT STEPS **step 14 (cli)**, then **15 (meta-package)**, 16–17.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
