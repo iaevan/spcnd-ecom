@@ -1,4 +1,4 @@
-import type { Schema } from '@spcnd-ecom/db';
+import type { Schema } from '@spacendigital/db';
 
 type Tables = Schema;
 

@@ -21,7 +21,7 @@ const CREATE_MIGRATIONS_TABLE: Record<string, string> = {
   )`,
 };
 
-/** Default migrations directory shipped inside the @spcnd-ecom/db package. */
+/** Default migrations directory shipped inside the @spacendigital/db package. */
 export function defaultMigrationsDir(dialect: string): string {
   return fileURLToPath(new URL(`../migrations/${dialect}`, import.meta.url));
 }

@@ -21,7 +21,7 @@ import {
   TAX_STATUSES,
   VARIATION_MANAGE_STOCK,
   WEBHOOK_STATUSES,
-} from '@spcnd-ecom/types';
+} from '@spacendigital/types';
 import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,

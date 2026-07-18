@@ -25,7 +25,7 @@ that gap.
 
 It is **not** a hosted SaaS, **not** a WordPress plugin, **not** a drop-in replacement for the PHP
 runtime. It is the engine, exposed as a typed TS library, with a clean core and a WooCommerce
-compatibility layer (`@spcnd-ecom/compat-wc`) that re-exposes the hook names, meta tables, and REST
+compatibility layer (`@spacendigital/compat-wc`) that re-exposes the hook names, meta tables, and REST
 shapes plugin authors already know.
 
 ---
@@ -37,9 +37,9 @@ spcnd-ecom is an installable library. The user is expected to write app code tha
 ```ts
 // their-app/src/server.ts
 import { createSpcndApp } from 'spcnd-ecom';
-import { sqlite } from '@spcnd-ecom/db';
-import { ResendMail } from '@spcnd-ecom/email/transports';
-import { StripeGateway } from '@spcnd-ecom/payments/gateways';
+import { sqlite } from '@spacendigital/db';
+import { ResendMail } from '@spacendigital/email/transports';
+import { StripeGateway } from '@spacendigital/payments/gateways';
 
 export const app = createSpcndApp({
   db: sqlite('./spcnd.db'),
@@ -61,7 +61,7 @@ The demo Astro app in `apps/demo` shows the canonical wiring. spcnd-ecom itself 
 server process — only the library, factory functions, and adapters.
 
 A meta-package `spcnd-ecom` re-exports the public surfaces of all sub-packages so users can install
-one package. Power users can install sub-packages directly (`@spcnd-ecom/core`, `@spcnd-ecom/api`).
+one package. Power users can install sub-packages directly (`@spacendigital/core`, `@spacendigital/api`).
 
 ---
 
@@ -83,7 +83,7 @@ one package. Power users can install sub-packages directly (`@spcnd-ecom/core`, 
 | Validation | Zod end-to-end (HTTP, settings, plugin config). |
 | Admin UI | shadcn/ui + Tailwind v4. |
 | Charts | Recharts in admin only. |
-| Plugin ecosystem | Clean typed core + compat layer (`@spcnd-ecom/compat-wc`) reproducing WC shape. Both audiences served. |
+| Plugin ecosystem | Clean typed core + compat layer (`@spacendigital/compat-wc`) reproducing WC shape. Both audiences served. |
 | Plugin distribution | Plugins are npm packages. Auto-discovery via `package.json["spcnd-ecom"]` metadata is **opt-in**, toggled in the TUI and in `spcnd-ecom.config.ts`. Default off. |
 | Feature scope | 100% behavioral parity with WooCommerce trunk. Built in one Fable pass with the build order in §13. |
 | License | MIT |
@@ -95,7 +95,7 @@ one package. Power users can install sub-packages directly (`@spcnd-ecom/core`, 
 ```
 spcnd-ecom/
 ├── packages/
-│   ├── types/                 # Shared TS types — generated from @spcnd-ecom/db where possible
+│   ├── types/                 # Shared TS types — generated from @spacendigital/db where possible
 │   ├── db/                    # Drizzle schemas for 3 dialects, migrations, dialect detection, seeders
 │   ├── core/                  # Framework-agnostic business logic. ZERO Node-only imports outside its IO edge.
 │   ├── api/                   # Hono factories: createRestV1(), createRestV3(), createWebhookRouter()
@@ -108,7 +108,7 @@ spcnd-ecom/
 │   ├── analytics/             # Reporting aggregation + lookup-table sync engine + cache hooks
 │   ├── plugin-system/         # Typed bus, DI container, plugin contract, auto-discovery, defineSpcndPlugin
 │   ├── compat-wc/             # do_action/apply_filters registry + ~150 WC hook name aliases + meta-table shims + WC-shaped REST serializer
-│   ├── adapters/              # @spcnd-ecom/astro, @spcnd-ecom/react, @spcnd-ecom/next (later)
+│   ├── adapters/              # @spacendigital/astro, @spacendigital/react, @spacendigital/next (later)
 │   ├── ui/                    # shadcn-based admin component library shared with apps/admin
 │   ├── cli/                   # `spcnd-ecom init` TUI, `db migrate`, `db sync-lookups`, codegen
 │   └── spcnd-ecom/            # Meta-package re-exporting public surfaces
@@ -190,7 +190,7 @@ The complete per-table SQL lives in `packages/db/src/{dialect}/schema.sql` gener
 - `spcnd-ecom db sync-lookups --rebuild` — full rebuild of all denormalized lookup tables in one transaction.
 - `spcnd-ecom db seed --file path/to/seed.json` — idempotent seed runner.
 
-Major-version upgrade path (WC's 70+ update callbacks) is documented as a `defineMigration(from, to, fn)` contract in `@spcnd-ecom/db` for the future.
+Major-version upgrade path (WC's 70+ update callbacks) is documented as a `defineMigration(from, to, fn)` contract in `@spacendigital/db` for the future.
 
 ---
 
@@ -340,7 +340,7 @@ The full 45+ controller list is in the original AGENTS.md §14.3 and `docs/wooco
 
 The hook system is the soul of WooCommerce and must be reproduced. But it must be reproduced in a way that doesn't poison the typed core.
 
-### 7.1 Layer 1 — `@spcnd-ecom/plugin-system` (typed core API)
+### 7.1 Layer 1 — `@spacendigital/plugin-system` (typed core API)
 
 - **Typed event bus**: `bus.emit(event<T>(symbol), payload: T)` and `bus.filter<T>(event, value, ...)`. Events are opaque typed descriptors created via `defineEvent<T>('product.save.before')`. Per-app-instance bus — no globals.
 - **DI container**: `container.resolve<T>(ServiceToken<T>())`. Tokens are typed symbols registered at app boot.
@@ -350,11 +350,11 @@ The hook system is the soul of WooCommerce and must be reproduced. But it must b
 
 Built-in features (cart, checkout, orders, etc.) are themselves implemented as plugins against the same contract — there is no privileged path. They just ship by default in the meta-package.
 
-### 7.2 Layer 2 — `@spcnd-ecom/compat-wc` (WooCommerce shape)
+### 7.2 Layer 2 — `@spacendigital/compat-wc` (WooCommerce shape)
 
 - **`doAction(name, ...args)`** and **`applyFilters<T>(name, value, ...args)`** — global-shape registry for WC-porting plugins. Routes through the typed bus internally, so actions/filters and typed events share one pipeline. Hook names approximate the 150 names in old AGENTS.md §28 (full list reproduced below in §7.3 with deltas marked).
 - **Hook name typing map**: known hook names are typed (`applyFilters<'woocommerce_product_get_price', number, ...>`); unknown names return `any` at the boundary, documented.
-- **`spcnd_register_post_type` / `spcnd_register_taxonomy`** — these names exist (they're emitted as no-op events at app boot) because WC-porting plugin authors put initialization logic in those hooks. The names are kept purely for surface familiarity. Documented as compat-only; behavior under the hood is replaced by the typed `defineEntityType()` API in `@spcnd-ecom/core`.
+- **`spcnd_register_post_type` / `spcnd_register_taxonomy`** — these names exist (they're emitted as no-op events at app boot) because WC-porting plugin authors put initialization logic in those hooks. The names are kept purely for surface familiarity. Documented as compat-only; behavior under the hood is replaced by the typed `defineEntityType()` API in `@spacendigital/core`.
 - **Meta-table shims**: `getProductMeta(productId, key)`, `updateProductMeta(...)`, etc. wrapping the EAV tables, matching WC's `get_post_meta`/`update_post_meta` signatures.
 - **`get_woocommerce_*` helper shims**: `get_woocommerce_currency()`, `woocommerce_weight_unit()`, etc. — wrapped over typed settings tables.
 - **WC-shaped REST serializer**: takes a v1 domain object and emits the v3 WC-shaped JSON (`price` as string, `dimensions` as nested strings, `images[].src` as resolved media URL, etc.). This is what powers `/api/v3/*`.
@@ -370,7 +370,7 @@ Delta from old §28.10: `spcnd_register_taxonomy` / `spcnd_after_register_taxono
 
 A PHP WC plugin author ports to spcnd-ecom by:
 1. `npm init`, write TypeScript.
-2. `import { defineSpcndPlugin, doAction, applyFilters, getProductMeta, ... } from '@spcnd-ecom/compat-wc'`.
+2. `import { defineSpcndPlugin, doAction, applyFilters, getProductMeta, ... } from '@spacendigital/compat-wc'`.
 3. Replace their `add_action('woocommerce_X', fn)` with `compat.on('woocommerce_X', fn)`. Same hook names, same payloads.
 4. Replace `get_post_meta`/`update_post_meta` with the meta shims.
 5. For new work, prefer the typed `bus` and `defineEvent` API from Layer 1.
@@ -441,7 +441,7 @@ Documented above (§4.4). Demo seed ships in `apps/demo/seed.json` with 6 produc
 
 Vite + React 18 + React Router 6 + TanStack Query + shadcn/ui + Tailwind v4 + Recharts.
 
-Built to a static bundle (`apps/admin/dist`) that the `@spcnd-ecom/api` `createAdminHandler()` can serve at `/spcnd-admin` from any host. Also buildable standalone with `pnpm build --filter @spcnd-ecom/admin`.
+Built to a static bundle (`apps/admin/dist`) that the `@spacendigital/api` `createAdminHandler()` can serve at `/spcnd-admin` from any host. Also buildable standalone with `pnpm build --filter @spacendigital/admin`.
 
 ### 9.1 Pages (full WC parity, per old §16.1 + §16.2)
 
@@ -453,20 +453,20 @@ Recharts on client only. Admin is a separate SPA — does not break the "core is
 
 ### 9.3 Components
 
-Shared `@spcnd-ecom/ui` (shadcn-based) — used by admin only; not depended on by `core` or `api`.
+Shared `@spacendigital/ui` (shadcn-based) — used by admin only; not depended on by `core` or `api`.
 
 ---
 
-## 10. Storefront (`apps/demo` + `@spcnd-ecom/adapters/astro`)
+## 10. Storefront (`apps/demo` + `@spacendigital/adapters/astro`)
 
 The demo Astro app is the canonical example. All page templates from old §19.1 are implemented:
 - Shop/archive, single product, category archive, tag archive, cart, checkout, thank-you, my-account, login/register, lost-password.
-- Components replacing 20 shortcodes (old §19.2) and 15 widgets (old §19.3) — implemented as Astro components in `apps/demo/src/components/` and exported from `@spcnd-ecom/adapters/astro` for reuse.
+- Components replacing 20 shortcodes (old §19.2) and 15 widgets (old §19.3) — implemented as Astro components in `apps/demo/src/components/` and exported from `@spacendigital/adapters/astro` for reuse.
 - All 16 form handlers (old §19.4) implemented as Astro server endpoints calling the API.
 
-`@spcnd-ecom/adapters/react` ships a typed Hono-api client + React hooks for users who want a React storefront.
+`@spacendigital/adapters/react` ships a typed Hono-api client + React hooks for users who want a React storefront.
 
-`@spcnd-ecom/adapters/next` ships a Next.js app-router integration (later — stub in v1).
+`@spacendigital/adapters/next` ships a Next.js app-router integration (later — stub in v1).
 
 ---
 

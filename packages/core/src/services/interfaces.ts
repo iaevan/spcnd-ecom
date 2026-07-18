@@ -1,7 +1,7 @@
-import type { SpcndDb } from '@spcnd-ecom/db';
-import type { createToken } from '@spcnd-ecom/plugin-system';
-import { createToken as token } from '@spcnd-ecom/plugin-system';
-import type { Address } from '@spcnd-ecom/types';
+import type { SpcndDb } from '@spacendigital/db';
+import type { createToken } from '@spacendigital/plugin-system';
+import { createToken as token } from '@spacendigital/plugin-system';
+import type { Address } from '@spacendigital/types';
 import type { Order } from '../entities.js';
 
 /**

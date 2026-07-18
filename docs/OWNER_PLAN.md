@@ -16,7 +16,7 @@ account once v1 is shippable. **Do not delete until the transfer is complete.**
 - **No repo has been created there yet.** Do not create it until you are ready to transfer —
   the transfer tool requires the target repo name to be available.
 - **npm org `@spacendigital` is already created and owned** (https://www.npmjs.com/org/spacendigital).
-  The codebase scope rename from `@spcnd-ecom/*` to `@spacendigital/*` (see
+  The codebase scope rename from `@spacendigital/*` to `@spacendigital/*` (see
   `docs/SCOPE_RENAME.md`) ensures the published packages will land under the owned scope.
   No npm-side action remaining until first publish.
 
@@ -51,16 +51,16 @@ PRs, releases, stars, branches, default branch setting. The 4 commits already at
    do not (they reference the branch name only), so likely no change needed.
 
 5. (Optional) Update the npm scope ownership when you publish to npm. If you publish
-   `@spcnd-ecom/*` packages from the personal account first, they tie the scope to that
-   account. If you publish under the org, transfer the `@spcnd-ecom` npm scope to the
+   `@spacendigital/*` packages from the personal account first, they tie the scope to that
+   account. If you publish under the org, transfer the `@spacendigital` npm scope to the
    `spacendigital` org on npmjs.com before first publish. **You have not published yet —**
    so this is a non-issue until you do.
 
 ## What does NOT need to change
 
-- Package names (`@spcnd-ecom/*`) — these are npm scopes, not GitHub URLs. They remain the
+- Package names (`@spacendigital/*`) — these are npm scopes, not GitHub URLs. They remain the
   same regardless of which GitHub org owns the repo.
-- Any code that imports `@spcnd-ecom/*` — works identically.
+- Any code that imports `@spacendigital/*` — works identically.
 - The contributors graph — all commits stay attributed to `Ishtiak Ahmed Evan
   <iaevan008@gmail.com>`.
 - Star count — transfers over.

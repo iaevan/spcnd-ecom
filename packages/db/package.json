@@ -1,5 +1,5 @@
 {
-  "name": "@spcnd-ecom/db",
+  "name": "@spacendigital/db",
   "version": "0.1.0",
   "description": "Drizzle schemas for SQLite/PostgreSQL/MySQL, migrations and seeders for spcnd-ecom",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "db:seed": "node dist/bin/seed.js"
   },
   "dependencies": {
-    "@spcnd-ecom/types": "workspace:*",
+    "@spacendigital/types": "workspace:*",
     "better-sqlite3": "^11.10.0",
     "drizzle-orm": "^0.44.2",
     "mysql2": "^3.14.1",

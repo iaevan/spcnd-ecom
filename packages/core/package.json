@@ -1,5 +1,5 @@
 {
-  "name": "@spcnd-ecom/core",
+  "name": "@spacendigital/core",
   "version": "0.1.0",
   "description": "Framework-agnostic commerce engine for spcnd-ecom: entities, cart, checkout, orders, coupons, settings, i18n, SEO",
   "license": "MIT",
@@ -19,9 +19,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@spcnd-ecom/db": "workspace:*",
-    "@spcnd-ecom/plugin-system": "workspace:*",
-    "@spcnd-ecom/types": "workspace:*",
+    "@spacendigital/db": "workspace:*",
+    "@spacendigital/plugin-system": "workspace:*",
+    "@spacendigital/types": "workspace:*",
     "drizzle-orm": "^0.44.2",
     "zod": "^3.25.0"
   },

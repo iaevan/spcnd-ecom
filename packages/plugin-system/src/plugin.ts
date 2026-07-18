@@ -2,7 +2,7 @@ import type { TypedBus } from './bus.js';
 import type { Container } from './container.js';
 
 /**
- * The minimal host surface a plugin's `setup()` receives. `@spcnd-ecom/core`'s
+ * The minimal host surface a plugin's `setup()` receives. `@spacendigital/core`'s
  * app kernel implements this; plugin-system itself has no dependency on core.
  */
 export interface PluginHost {

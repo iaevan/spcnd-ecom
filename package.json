@@ -19,12 +19,12 @@
     "test": "turbo run test",
     "test:integration": "vitest run --project integration",
     "test:compat": "vitest run --project compat",
-    "test:e2e": "pnpm --filter @spcnd-ecom/demo test:e2e",
-    "db:generate": "pnpm --filter @spcnd-ecom/db db:generate",
-    "db:push": "pnpm --filter @spcnd-ecom/db db:push",
-    "db:studio": "pnpm --filter @spcnd-ecom/db db:studio",
-    "db:migrate": "pnpm --filter @spcnd-ecom/db db:migrate",
-    "db:seed": "pnpm --filter @spcnd-ecom/db db:seed",
+    "test:e2e": "pnpm --filter @spacendigital/demo test:e2e",
+    "db:generate": "pnpm --filter @spacendigital/db db:generate",
+    "db:push": "pnpm --filter @spacendigital/db db:push",
+    "db:studio": "pnpm --filter @spacendigital/db db:studio",
+    "db:migrate": "pnpm --filter @spacendigital/db db:migrate",
+    "db:seed": "pnpm --filter @spacendigital/db db:seed",
     "depcruise": "depcruise packages apps --config .dependency-cruiser.cjs"
   },
   "devDependencies": {

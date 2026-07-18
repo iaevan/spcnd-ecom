@@ -1,6 +1,6 @@
 /**
  * Typed settings registry. Keys are WooCommerce option names with the
- * `woocommerce_` prefix stripped; `@spcnd-ecom/compat-wc`'s `get_option()`
+ * `woocommerce_` prefix stripped; `@spacendigital/compat-wc`'s `get_option()`
  * shim maps prefixed names back onto these. Each key declares which typed
  * settings table stores it (docs/AGENTS.md §5 "Settings").
  */

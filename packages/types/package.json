@@ -1,5 +1,5 @@
 {
-  "name": "@spcnd-ecom/types",
+  "name": "@spacendigital/types",
   "version": "0.1.0",
   "description": "Shared enums, branded id types and the Money value type for spcnd-ecom",
   "license": "MIT",

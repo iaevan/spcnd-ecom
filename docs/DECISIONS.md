@@ -48,7 +48,7 @@ Spec-gap decisions made during the build, per the operating instructions.
   is not on the spec's Node-only list (§8), so it must stay edge-portable; node:crypto scrypt
   and native argon2 are Node-only.
 - Decision: PBKDF2-SHA256 (600k iterations, per-hash random salt) via `crypto.subtle`,
-  implemented in @spcnd-ecom/auth. The stored format is versioned (`pbkdf2$...`) so a stronger
+  implemented in @spacendigital/auth. The stored format is versioned (`pbkdf2$...`) so a stronger
   algorithm can be added later without invalidating hashes.
 - Rationale: OWASP-acceptable, zero dependencies, runs on Node 20 and edge runtimes.
 
@@ -62,7 +62,7 @@ Spec-gap decisions made during the build, per the operating instructions.
 ## DECISION-7: `createSpcndApp` lives in the meta-package; core exports `createSpcndCore`
 - Context: §1 shows `createSpcndApp(config)` returning `app.api` / `app.admin`, but §3.1 forbids
   core from importing the api package (api → core).
-- Decision: @spcnd-ecom/core exports the kernel factory (`createSpcndCore`: db, bus, container,
+- Decision: @spacendigital/core exports the kernel factory (`createSpcndCore`: db, bus, container,
   settings, services, plugin loading). The `spcnd-ecom` meta-package composes kernel + api +
   default service impl plugins into the user-facing `createSpcndApp`.
 - Rationale: Keeps the dependency DAG acyclic while preserving the spec's public API shape.

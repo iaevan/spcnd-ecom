@@ -1,7 +1,7 @@
 /**
  * The typed event bus. One pipeline serves both worlds: typed events created
  * with `defineEvent`, and the WooCommerce-named actions/filters that
- * `@spcnd-ecom/compat-wc` routes through `alias()`. Handlers are stored per
+ * `@spacendigital/compat-wc` routes through `alias()`. Handlers are stored per
  * canonical name, so a legacy `woocommerce_*` listener and a typed listener
  * registered against the same event run in one priority-ordered chain.
  */

@@ -31,7 +31,7 @@ You are resuming the spcnd-ecom build. Work is committed on branch **`main`**
 
 ## ⚠ DO THIS FIRST — before RESUME.md step 1
 
-Read **`docs/SCOPE_RENAME.md`** and execute the npm-scope rename from `@spcnd-ecom/*`
+Read **`docs/SCOPE_RENAME.md`** and execute the npm-scope rename from `@spacendigital/*`
 to `@spacendigital/*` in one commit. Verify all 21 existing tests still pass after the
 rename. Then continue with RESUME.md step 1 (finish `@spacendigital/core` — note the new
 scope name in subsequent commits).

@@ -1,4 +1,4 @@
-import { defineEvent, defineFilter } from '@spcnd-ecom/plugin-system';
+import { defineEvent, defineFilter } from '@spacendigital/plugin-system';
 import type {
   Coupon,
   Customer,
@@ -12,7 +12,7 @@ import type {
 } from './entities.js';
 
 /**
- * Canonical typed event catalog. `@spcnd-ecom/compat-wc` aliases the ~150
+ * Canonical typed event catalog. `@spacendigital/compat-wc` aliases the ~150
  * WooCommerce hook names onto these canonical names, so a typed listener and a
  * `woocommerce_*` listener share one priority-ordered chain (docs/AGENTS.md §7).
  *

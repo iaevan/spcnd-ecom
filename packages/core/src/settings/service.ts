@@ -1,4 +1,4 @@
-import type { SpcndDb } from '@spcnd-ecom/db';
+import type { SpcndDb } from '@spacendigital/db';
 import { eq } from 'drizzle-orm';
 import { SETTING_DEFINITIONS, type SettingKind } from './defaults.js';
 

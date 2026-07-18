@@ -1,4 +1,4 @@
-import { Money } from '@spcnd-ecom/types';
+import { Money } from '@spacendigital/types';
 import { customType, integer, text } from 'drizzle-orm/sqlite-core';
 
 /**

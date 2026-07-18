@@ -14,8 +14,8 @@ system). spcnd-ecom closes that gap with a stack you actually want to use in 202
   your Astro / Next / Hono / Remix / Express app and call factory functions.
 - **Full behavioral parity with WooCommerce trunk.** Every feature, data model, algorithm, hook,
   and REST shape is reproduced.
-- **Two-layer plugin system**: a clean typed core (`@spcnd-ecom/plugin-system`) for new JS plugins,
-  plus `@spcnd-ecom/compat-wc` that re-exposes the WooCommerce hook names, meta tables, and REST
+- **Two-layer plugin system**: a clean typed core (`@spacendigital/plugin-system`) for new JS plugins,
+  plus `@spacendigital/compat-wc` that re-exposes the WooCommerce hook names, meta tables, and REST
   shapes so PHP WC plugin authors can port with mostly mechanical translation.
 - **Multi-dialect storage**: SQLite (zero-config default), PostgreSQL (production), MySQL.
 - **One Astro demo app** (in `apps/demo`) showing the canonical wiring — both storefront and

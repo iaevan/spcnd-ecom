@@ -1,5 +1,5 @@
 {
-  "name": "@spcnd-ecom/plugin-system",
+  "name": "@spacendigital/plugin-system",
   "version": "0.1.0",
   "description": "Typed event bus, DI container and plugin contract for spcnd-ecom",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@spcnd-ecom/types": "workspace:*"
+    "@spacendigital/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
