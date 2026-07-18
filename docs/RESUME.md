@@ -66,7 +66,22 @@ createWcCompat (doAction/applyFilters/compat.on over the shared bus), EAV
 meta shims, get_option/update_option + wc_price shims, and the WC REST v3
 serializers for products/orders/customers/coupons/reviews with relation
 loaders. 13 package tests; workspace 71 tests green, depcruise clean.
-Next session starts at NEXT STEPS **step 3 (auth stub)** then **step 4 (tax)**.
+
+**Steps 3–7 are DONE** (commits d0a1b31 + the shipping/payments/reviews one):
+- `@spacendigital/auth` — S4 stub plugin (logs marker, rejects credential calls)
+- `@spacendigital/tax` — full WC_Tax port: §7.3 find_rates (specificity sort,
+  wildcard/range postcodes, one-rate-per-priority, class slugs) + §7.2
+  calc_inclusive/exclusive with compound handling; TaxPlugin registers via DI
+  (core now exposes an SPCND_DB container token for impl packages)
+- `@spacendigital/shipping` — zone specificity resolution, flat_rate cost
+  expressions ([qty]/[cost]/[fee], per-class costs, class|order calc types),
+  free_shipping requirements, local_pickup; ShippingPlugin
+- `@spacendigital/payments` — config-only COD/BACS/Cheque gateways +
+  place-order status routing; stripe/paypal refused w/ S5 marker
+- `@spacendigital/reviews` — verified-owner detection, moderation,
+  same-txn rating aggregate sync; ReviewsPlugin
+Workspace: 10 packages, 90 tests green, depcruise clean.
+Next session starts at NEXT STEPS **step 8 (email)** then **step 9 (analytics)**.
 
 New since the last handoff (packages/core/src/):
 - catalog/product-service.ts — single write path + meta_lookup same-txn sync,
