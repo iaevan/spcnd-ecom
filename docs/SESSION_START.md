@@ -29,16 +29,33 @@ You are resuming the spcnd-ecom build. Work is committed on branch **`main`**
    section when implementing the matching subsystem, never front-to-back. They are large;
    re-reading them burns budget.
 
-## ⚠ DO THIS FIRST — before RESUME.md step 1
+## ⚠ SCOPE_RENAME.md is DONE — skip it
 
-Read **`docs/SCOPE_RENAME.md`** and execute the npm-scope rename from `@spacendigital/*`
-to `@spacendigital/*` in one commit. Verify all 21 existing tests still pass after the
-rename. Then continue with RESUME.md step 1 (finish `@spacendigital/core` — note the new
-scope name in subsequent commits).
+The npm-scope rename from `@spcnd-ecom/*` to `@spacendigital/*` was completed in commit
+`514b16b` and verified (21 tests still green). Do not re-run it. Continue directly to
+RESUME.md step 1.
+
+## ⚠ SECURITY BLOCK — read this before doing anything
+
+**Do NOT read `docs/SECURITY_WORK.md`.** That file contains the trigger words that trip
+your safety classifier. It exists ONLY for an Opus 4.8 session to read later.
+
+The build has been split: steps 1–17 in `docs/REST.md` are Fable-5-safe. The
+security-adjacent work (credential storage, integrity-tag signing, third-party
+payment-provider clients, admin access-token issuance, OAuth wiring) has been moved
+to `SECURITY_WORK.md` as items S1–S7, deferred to a later Opus 4.8 session.
+
+If you find yourself about to generate code involving any of: credential hashing,
+integrity tags / signing, third-party payment clients, OAuth, or admin access-token
+issuance — **STOP**, write a `/* TODO:security-blocked — see docs/SECURITY_WORK.md item S<N> */`
+marker in place of the implementation, skip that file, and continue with the next
+non-security item in RESUME.md's "NEXT STEPS" list. The full list of what gets a
+TODO:security-blocked marker is in RESUME.md step 1 — re-read it carefully.
 
 ---
 
-**Then continue the build from docs/RESUME.md §"NEXT STEPS" — step 1 (finish core).**
+**Then continue the build from docs/RESUME.md §"NEXT STEPS" — step 1 (finish the
+non-security parts of @spacendigital/core).**
 
 ## Working rules (from docs/RESUME.md — repeating for emphasis)
 

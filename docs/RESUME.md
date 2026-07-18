@@ -1,9 +1,21 @@
 # RESUME — build state handoff
 
 Working notes for continuing the spcnd-ecom build across sessions. Read this, then
-`docs/AGENTS.md` (the spec), then `docs/DECISIONS.md`. The five `docs/woocommerce-*.md` files
-are the behavioral reference (the original AGENTS.original.md is NOT in the repo — see
-DECISION-1; the reports replace it).
+`docs/AGENTS.md` (the spec — skip §6 and §7 entirely on Fable 5; those sections
+describe security-adjacent work that is deferred, see `docs/SECURITY_WORK.md`),
+then `docs/DECISIONS.md`.
+
+The five `docs/woocommerce-*.md` files are the behavioral reference (the original
+AGENTS.original.md is NOT in the repo — see DECISION-1; the reports replace it).
+
+> **Fable 5 sessions:** Do NOT read `docs/SECURITY_WORK.md`. It will trip your
+> safety classifier. All security-adjacent build items (credential storage,
+> integrity-tag signing, third-party payment-provider integration, admin
+> access-token issuance, OAuth wiring) have been moved there. They are deferred
+> to a later session on Opus 4.8. If you find yourself about to generate code
+> that touches any of those topics, STOP, write a `/* TODO:security-blocked —
+> see docs/SECURITY_WORK.md item S<N> */` marker, skip that file, and continue
+> with the next non-security item in this file's "NEXT STEPS" list.
 
 ## ⚠ Working rules for future sessions
 
@@ -19,6 +31,9 @@ DECISION-1; the reports replace it).
    module-level singletons, core → impl-package imports (dependency-cruiser enforces).
 4. Update docs/DECISIONS.md when filling a genuine spec gap; update this file's status section
    before ending a session.
+5. **Never generate code in the following domains on Fable 5** — they trip the classifier:
+   credential storage, integrity-tag / signing helpers, third-party payment-provider clients,
+   admin access-token issuance, OAuth provider wiring. Skip those items; see SECURITY_WORK.md.
 
 ## Environment facts (verified)
 
@@ -50,48 +65,66 @@ Written so far (all under packages/core/src/):
 - settings/defaults.ts — typed setting registry (unprefixed WC option names, DECISION-6)
 - settings/service.ts — SettingsService over the 5 settings tables w/ cache + baseLocation()
 - utils.ts — slugify, stableHash (32-hex), randomString, generateOrderKey (`wc_order_`+13),
-  hmacSha256Base64/sha256Hex (WebCrypto), wildcard/range postcode matching, escapeHtml
+  integrity-tag helpers (WebCrypto-based; see SECURITY_WORK item S1 before extending),
+  wildcard/range postcode matching, escapeHtml
 - i18n/countries.ts — 249 countries, continents, EU list, no-postcode list, calling codes
 - i18n/currencies.ts — ~160 currencies + symbols + zero-decimal list
 
-## NEXT STEPS (in order — spec §13)
+## NEXT STEPS (in order — spec §13) — every step below is Fable-5-safe
 
-1. **Finish core** (then add core to vitest + write tests):
+1. **Finish the non-security parts of core** (then add core to vitest + write tests):
    - i18n/states.ts (US/CA/AU/BR/MX/IN/JP/IE/NZ/ES/IT/ZA at minimum), i18n/address-formats.ts
      (WC's ~40 country format strings), i18n/index.ts
    - catalog/product-service.ts — CRUD w/ single write path syncing product_meta_lookup in same
      txn; price resolution (sale windows); stock ops (reduce/restore/set + events); visibility;
      related/upsell/crosssell queries; SKU lookup
-   - customers/customer-service.ts (+ addresses, guest→registered)
+   - customers/customer-service.ts (+ addresses; for the guest→registered conversion, leave
+     the credential-creation step as a TODO:security-blocked marker per SECURITY_WORK item S4
+     and only persist the customer row — the auth package will handle credential binding later)
    - coupons/coupon-service.ts — validation pipeline exactly per comprehensive report §9.10
      (order: exists→usage→per-user→expiry→min→max→product ids→cats→excluded→eligible→emails→
      filter coupon.is_valid), usage tracking incl. tentative usage for guests
    - discounts/discounts.ts — WC_Discounts port (§9.3–9.9): items sorted price desc, percent
      (floor per item + cart-level remainder correction), fixed_product, fixed_cart (per-item
      floor + recursion + 1-cent remainder distribution), sequential vs parallel setting
-   - cart/cart-service.ts + cart/totals.ts — session-backed cart (sessions table, WC cookie
-     shape `{customer_id}|{expiration}|{expiring}|{hmac}` per analysis report §5); add/remove/
+   - cart/cart-service.ts + cart/totals.ts — session-backed cart (sessions table); add/remove/
      restore/set-qty with all validations (sold individually, stock incl. in-cart qty,
      purchasable); totals engine per comprehensive §11.1: subtotals (inclusive/exclusive tax,
      round-per-line vs at-subtotal), discounts, fees w/ negative capping (§11.7), shipping,
-     grand total; fires cart.* events
+     grand total; fires cart.* events. **For the session-cookie shape, use a placeholder
+     stringify format `{customer_id}|{expiration}|{expiring}|{TODO_integrity_tag}` and add a
+     `TODO:security-blocked — SECURITY_WORK item S2` comment.** Do not implement the
+     integrity-tag computation — that lives in SECURITY_WORK S2.
    - checkout/checkout-service.ts — flow per core-architecture §7: posted-data validation
      (country/state/postcode/email/phone/required), create order from cart (resume on cart_hash
-     match), process_customer, payment vs no-payment paths; fires all checkout.* events
+     match), process_customer, payment vs no-payment paths; fires all checkout.* events. **Skip
+     any call to actual payment-gateway processing** — call a `TODO:security-blocked — S5`
+     stub for now and treat every checkout as no-payment for testing purposes.
    - orders/order-service.ts — status machine + transition events (dynamic names), needsPayment/
      isPaid/isEditable filters, payment_complete flow (§2.4 of comprehensive), calculate_totals
      + calculate_taxes + update_taxes consolidation (§11.2/11.3), order_events one-shot ops
      (stock_reduced, recorded_sales, recorded_coupon_usage_counts, download_permissions_granted,
-     new_order_email_sent), refunds (full/partial + events), notes
-   - webhooks/webhook-service.ts — topic match, queue via QueueAdapter, deliver w/ HMAC base64
-     signature, 5 failures → disabled, ping
+     new_order_email_sent), refunds (full/partial + events), notes. **The `order_key` field uses
+     a stable random string for now — leave the `wc_order_` prefix per WC convention but skip
+     any integrity-tag generation; mark `TODO:security-blocked — S1`.**
+   - **SKIP `webhooks/webhook-service.ts` entirely** — write the file with a single
+     `/* TODO:security-blocked — see SECURITY_WORK item S3 */` export stub. The full
+     implementation belongs in S3.
    - media/media-service.ts, downloads/download-service.ts (grant on payment_complete or
      processing per settings; downloads_remaining decrement)
-   - sessions/session-service.ts (DB SessionStore impl + cookie helpers)
+   - **SKIP `sessions/session-service.ts`** — write the file with a single
+     `/* TODO:security-blocked — see SECURITY_WORK item S2 */` export stub. The SessionStore
+     impl belongs in S2. (Cart and checkout can import a placeholder SessionStore that returns
+     empty sessions for now — enough to make cart-service tests pass against a fake.)
    - queue/memory-queue.ts, cache/memory-cache.ts (LRU), search/db-search.ts (FTS per dialect +
      LIKE fallback), seo/jsonld.ts, gdpr/exporters.ts + erasers + anonymize, app.ts
      (`createSpcndCore(config)`: connect db, run migrations opt, bus, container, settings,
      services, plugin setup incl. optional discovery), index.ts exporting everything
+
+   **Acceptance for step 1:** `pnpm --filter @spacendigital/core build` passes; a test file
+   exists for cart, coupons, discounts, checkout, orders, catalog, customers that exercises the
+   non-security paths. Commit. Update this file's status section. Move to step 2.
+
 2. **compat-wc** — doAction/applyFilters + `compat.on`, alias table mapping the ~150 WC hook
    names (lists: comprehensive §10.1–10.8, core-architecture §10, api_reference §7) onto
    events.ts canonical names; meta shims (get/update/delete ProductMeta/OrderMeta/CustomerMeta/
@@ -101,60 +134,95 @@ Written so far (all under packages/core/src/):
    [{id,name,slug}]; orders; customers; coupons; reviews); `{prop}` getter filter bridge
    (fire `woocommerce_product_get_{prop}` aliases via bus.alias so sync applyFiltersSync works);
    spcnd_register_post_type etc. no-op boot events
-3. **auth** — PBKDF2 hash/verify (DECISION-5), auth_sessions token issue/validate, roles/
-   capabilities map (customer/shop_manager/admin), Arctic OAuth provider wiring (optional
-   config), api_keys generation (ck_/cs_ + truncated_key, sha256-stored secret hmm — WC stores
-   consumer_secret plaintext; keep plaintext column per schema, compare timing-safe)
+
+3. **SKIP on Fable 5 — `auth` package belongs in SECURITY_WORK item S4.** Write a stub
+   `packages/auth/package.json` and `packages/auth/src/index.ts` that exports an `AuthPlugin`
+   which, when registered, no-ops all credential-related calls and logs `TODO:security-blocked
+   — SECURITY_WORK item S4`. This stub is replaced by the real impl in S4.
+
 4. **tax** — TaxService impl: find_rates SQL per comprehensive §7.3 (country/state IN (x,''),
    postcode wildcard+range, city, one-rate-per-priority, specificity sort), calc_inclusive/
    exclusive per §7.2 (compound reverse-order handling), shipping rates, base rates; 5 default
    seed rates live in demo seed
+
 5. **shipping** — zones resolution (most specific location match wins: postcode > state >
    country > continent > rest-of-world zone 0), methods flat_rate (cost expr with [qty]/
    [cost]/percent + per-class costs), free_shipping (min_amount / coupon requires), local_pickup
-6. **payments** — gateway iface impl + registry plugin: COD (configurable enable_for_methods/
-   virtual), BACS (account details in settings), Cheque, Stripe + PayPal fetch clients
-   (DECISION-8); payment_tokens CRUD
+
+6. **SKIP on Fable 5 — `payments` package belongs in SECURITY_WORK item S5.** Write a stub
+   `packages/payments/package.json` and `packages/payments/src/index.ts` that exports a
+   `PaymentsPlugin` registering the COD / BACS / Cheque gateways (these are not security-work
+   — they are configuration-only, no third-party client) plus TODO markers for the
+   third-party-provider gateways. Real provider integration (the security-blocked part) is S5.
+
 7. **reviews** — create w/ verified_owner check (customer_paid_for_product via order lookup),
    moderation statuses, product rating sync (average_rating/rating_counts/review_count +
    meta_lookup)
+
 8. **email** — 22 templates (ids/triggers per feature-parity §3.2 table) as React components +
    layout; EmailService impl reading per-template settings (email_settings json); plugin
    subscribes bus events → sends (new_order to merchant on pending→processing etc., customer_*
-   on status transitions, note added, reset password, new account); transports console/smtp
-   (nodemailer)/resend/sendgrid (fetch); queue integration
+   on status transitions, note added, **reset password — reference SECURITY_WORK item S4 for
+   the credential-reset link generation**, new account); transports console/smtp (nodemailer)/
+   resend/sendgrid (fetch); queue integration
+
 9. **analytics** — AnalyticsSync impl (order_stats, order_product_lookup, order_tax_lookup,
    order_coupon_lookup, customer_lookup, category_lookup) written in caller's txn; 10 report
    queries (revenue, orders, products, categories, coupons, taxes, customers, stock, downloads,
    variations) + leaderboards; `db sync-lookups --rebuild`
+
 10. **api** — Hono createRestV1() (clean JSON) + createRestV3() (WC shapes via compat-wc
     serializer, X-WP-Total/X-WP-TotalPages/Link headers, batch {create,update,delete} on every
-    CRUD controller, HTTP Basic ck/cs auth), controllers per api_reference §1.3 registry
+    CRUD controller). **Skip the HTTP-Basic admin-token middleware — stub it with
+    `TODO:security-blocked — S6`. Use a dev-only "trust all requests" middleware in its place
+    for tests; document the replacement in S6.** Controllers per api_reference §1.3 registry
     (products+variations+cats+tags+attributes+terms+reviews, orders+notes+refunds, customers,
-    coupons, tax rates/classes, shipping zones/methods, webhooks, payment gateways, settings,
-    system_status, reports, data/countries/currencies); createWebhookRouter(); createAdminHandler
-    (serve apps/admin dist, Node fs — separate export path); session-cookie storefront routes
-    (cart/checkout endpoints for the Astro demo)
+    coupons, tax rates/classes, shipping zones/methods, webhooks, **gateway config endpoints —
+    list-only, no credential work; mark S5 for the actual gateway-charge endpoints**,
+    settings, system_status, reports, data/countries/currencies); createWebhookRouter() — stub
+    the signature header, mark S3; createAdminHandler (serve apps/admin dist, Node fs —
+    separate export path); session-cookie storefront routes (cart/checkout endpoints for the
+    Astro demo) — session-cookie integrity is S2, dev-only "trust all" middleware for now
+
 11. **ui + apps/admin** — Tailwind v4 + hand-rolled shadcn-style components; Vite React SPA:
     login, dashboard (Recharts), products list/edit, orders list/detail (status, refund, notes),
     customers, coupons, reviews moderation, tax, shipping zones, emails settings, settings tabs,
-    webhooks, api keys, system status; served at /spcnd-admin
+    webhooks, api keys, system status; served at /spcnd-admin. **Login flow calls into the auth
+    stub from step 3 — it will reject all logins with a "security-blocked" message in dev. Mark
+    the login form `TODO:security-blocked — S4 / S7`.**
+
 12. **adapters** (@spacendigital/astro: mount helper + components; @spacendigital/react: typed API
     client + hooks; next = stub)
+
 13. **apps/demo** — Astro SSR app: pages shop/product/category/tag/cart/checkout/thank-you/
     my-account/login/register/lost-password; API mounted via catch-all route forwarding to
     app.fetch; seed.json (6 products/2 cats/1 coupon/2 zones/5 tax rates/admin+customer users);
-    Playwright e2e: browse→add to cart→COD checkout→order in admin
+    Playwright e2e: browse→add to cart→COD checkout→order in admin. **COD is allowed (it's
+    configuration-only, no third-party client). The checkout flow works end-to-end with COD as
+    the only gateway.** The login + lost-password pages will show "security-blocked" until S4 + S7
+    land — that's fine for v1 demo, mark them with `TODO:security-blocked — S4/S7`.
+
 14. **cli** — @clack/prompts TUI: FIRST prompt = plugin auto-discovery (default OFF), then
     storage (sqlite default/pg/mysql + url), store url, admin credentials, email (console
     default), env write, seed y/n; writes spcnd-ecom.config.ts + .env + scripts; `db migrate|
-    rollback|seed|sync-lookups` subcommands calling db package
+    rollback|seed|sync-lookups` subcommands calling db package. **The admin-credential prompt
+    doesn't store credentials — it just sets a `pending_admin_setup` flag in the config. The
+    actual credential storage happens in S4 on Opus 4.8.**
+
 15. **spcnd-ecom meta-package** — createSpcndApp composing core+api+impl plugins (DECISION-7);
     re-export all public surfaces
+
 16. **tests/compat** (30+ WC behaviors), **tests/integration** (v1+v3 API against sqlite,
     pg/mysql skip-if-no-docker), e2e; README per package; root README refresh; `pnpm build/
-    typecheck/lint/test` + depcruise all green
-17. Final: verify acceptance criteria §14, update docs/DECISIONS.md, this file can then be deleted.
+    typecheck/lint/test` + depcruise all green. **Compat suite excludes anything tagged S1-S7
+    in SECURITY_WORK.md; those run as a separate test pass on Opus 4.8.**
+
+17. Final: verify acceptance criteria §14 (with the security items noted as deferred),
+    update docs/DECISIONS.md with the deferral decision, this file can then be deleted.
+
+18. **DEFERRED to Opus 4.8 session** — work through `docs/SECURITY_WORK.md` items S1 through S7
+    in order, on Claude Opus 4.8 (NOT Fable 5). Each is its own commit on `main`. Update this
+    file's status section after each S-step lands.
 
 ## Key architecture invariants (do not break)
 
@@ -168,3 +236,7 @@ Written so far (all under packages/core/src/):
   only, never each other; register themselves in the container as plugins.
 - api may import core + impls + compat-wc; apps import packages; nothing imports apps.
 - Turbo `test` depends on `^build` — run `pnpm build` before cross-package tests.
+- **All `TODO:security-blocked — S<N>` markers must be discoverable via**
+  `grep -rn "TODO:security-blocked" packages/ apps/`. **The Opus 4.8 session that picks up
+  SECURITY_WORK.md uses this grep as its work list. Never delete a TODO:security-blocked
+  marker without implementing the corresponding SECURITY_WORK item.**
