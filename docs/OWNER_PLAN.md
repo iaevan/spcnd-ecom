@@ -15,6 +15,10 @@ account once v1 is shippable. **Do not delete until the transfer is complete.**
   authenticated in `gh`)
 - **No repo has been created there yet.** Do not create it until you are ready to transfer —
   the transfer tool requires the target repo name to be available.
+- **npm org `@spacendigital` is already created and owned** (https://www.npmjs.com/org/spacendigital).
+  The codebase scope rename from `@spcnd-ecom/*` to `@spacendigital/*` (see
+  `docs/SCOPE_RENAME.md`) ensures the published packages will land under the owned scope.
+  No npm-side action remaining until first publish.
 
 ## Transfer procedure (when v1 is ready)
 

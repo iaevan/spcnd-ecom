@@ -97,7 +97,9 @@ the new scope name in subsequent commits).
 ## Why
 
 The decision was made by the owner to standardize on `spacendigital` as the
-GitHub + npm identity. Doing it now (before more of v1 is written) is much
-cheaper than renaming after the build is complete. Fable will resume writing
-the remaining ~80% of v1 against the final scope, so no second rename will
-ever be needed.
+GitHub + npm identity. The npm org `@spacendigital` is already created and
+owned (https://www.npmjs.com/org/spacendigital), so the renamed packages will
+publish under an owned scope. Doing it now (before more of v1 is written) is
+much cheaper than renaming after the build is complete. Fable will resume
+writing the remaining ~80% of v1 against the final scope, so no second
+rename will ever be needed.
