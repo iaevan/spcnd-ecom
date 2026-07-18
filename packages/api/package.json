@@ -1,0 +1,38 @@
+{
+  "name": "@spacendigital/api",
+  "version": "0.1.0",
+  "description": "Hono HTTP surface for spcnd-ecom: clean REST v1, WC-shaped REST v3, storefront session routes, webhook router",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./admin": {
+      "types": "./dist/admin-handler.d.ts",
+      "default": "./dist/admin-handler.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@spacendigital/analytics": "workspace:*",
+    "@spacendigital/compat-wc": "workspace:*",
+    "@spacendigital/core": "workspace:*",
+    "@spacendigital/db": "workspace:*",
+    "@spacendigital/plugin-system": "workspace:*",
+    "@spacendigital/types": "workspace:*",
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
