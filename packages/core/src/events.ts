@@ -84,6 +84,18 @@ export const cartItemSetQuantity = defineEvent<{ key: string; quantity: number; 
   'cart.item.set_quantity',
 );
 export const cartBeforeCalculateTotals = defineEvent<{ cartId: string }>('cart.calculate.before');
+/** Fee-collection point (WC `woocommerce_cart_calculate_fees`): handlers call `fees.addFee(...)`. */
+export const cartCalculateFees = defineEvent<{
+  cartId: string;
+  fees: {
+    addFee(fee: {
+      name: string;
+      amountMinor: number;
+      taxable?: boolean;
+      taxClass?: string;
+    }): void;
+  };
+}>('cart.calculate_fees');
 export const cartAfterCalculateTotals = defineEvent<{ cartId: string }>('cart.calculate.after');
 export const cartBeforeEmptied = defineEvent<{ cartId: string }>('cart.emptied.before');
 export const cartEmptied = defineEvent<{ cartId: string }>('cart.emptied');

@@ -663,6 +663,24 @@ export class ProductService {
     return rows.map((r) => r.id);
   }
 
+  /** Category ids per product for a set of products (one query). */
+  async getCategoryIdMap(productIds: number[]): Promise<Map<number, number[]>> {
+    const map = new Map<number, number[]>();
+    if (productIds.length === 0) return map;
+    const { db } = this.deps;
+    const s = db.schema;
+    const rows = await db.drizzle
+      .select()
+      .from(s.productCategoryMap)
+      .where(inArray(s.productCategoryMap.productId, productIds));
+    for (const row of rows) {
+      const list = map.get(row.productId) ?? [];
+      list.push(row.categoryId);
+      map.set(row.productId, list);
+    }
+    return map;
+  }
+
   /**
    * WC `wc_get_related_products`: published products sharing a category or a
    * tag with the given product, excluding itself.
